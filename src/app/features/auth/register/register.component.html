@@ -1,15 +1,51 @@
-<h1>Sign up</h1>
-<form [formGroup]="form" (ngSubmit)="submit()">
-  <label>Prénom</label><input formControlName="firstName" />
-  <label>Nom</label><input formControlName="lastName" />
-  <label>Email</label><input type="email" formControlName="email" />
-  <label>Mot de passe</label><input type="password" formControlName="password" />
-  <label>Confirmer</label><input type="password" formControlName="confirm" />
-  <small *ngIf="(form.touched || form.dirty) && form.errors?.['notSame']">
-    Les mots de passe ne correspondent pas.
-  </small>
+<div class="signup-container">
+  <form [formGroup]="form" (ngSubmit)="submit()" class="signup-card">
+    <div class="header">
+      <div class="icon">✈️</div>
+      <h2>Rejoignez la communauté des voyageurs</h2>
+    </div>
 
-  <button type="submit" [disabled]="loading">Créer le compte</button>
-  <p *ngIf="error">{{ error }}</p>
-</form>
-<p>Déjà un compte ? <a routerLink="/auth/login">Se connecter</a></p>
+    <div class="fields">
+      <input
+        type="text"
+        formControlName="firstName"
+        placeholder="Firstname"
+        required
+      />
+      <input
+        type="text"
+        formControlName="lastName"
+        placeholder="Lastname"
+        required
+      />
+      <input
+        type="email"
+        formControlName="email"
+        placeholder="Email"
+        required
+      />
+      <input
+        type="password"
+        formControlName="password"
+        placeholder="Password"
+        required
+      />
+      <input
+        type="password"
+        formControlName="confirm"
+        placeholder="Confirm password"
+        required
+      />
+    </div>
+
+    <button type="submit" [disabled]="loading || form.invalid">
+      Créer mon compte
+    </button>
+
+    <p *ngIf="error" style="color:#ff6f00;">{{ error }}</p>
+
+    <p class="login-link">
+      Déjà inscrit ? <a routerLink="/auth/login">Connectez-vous</a>
+    </p>
+  </form>
+</div>
