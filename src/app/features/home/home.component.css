@@ -1,0 +1,279 @@
+/* ---------- CONTAINER ---------- */
+.home-container {
+    background-color: #f7f7f7;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* ---------- NAVBAR ---------- */
+  .navbar {
+    background-color: #1b3bbb;
+    width: 96%;
+    margin: 0px auto;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 40px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  }
+  
+  .nav-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .nav-logo {
+    width: 40px;
+  }
+  
+  .text-v {
+    color: #fff;
+    font-family: 'Lucida Sans', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+  }
+  
+  .profile-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  /* ---------- CARD (FORM CONTAINER) ---------- */
+  .home-content {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .home-card {
+    background-color: #fff;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    width: 80%;
+    max-width: 950px;
+    padding: 50px 70px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  /* ---------- TITLE ---------- */
+  .home-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 40px;
+  }
+  
+  .text-title {
+    color: #1b3bbb;
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0;
+  }
+  
+  .home-plane {
+    width: 45px;
+    height: auto;
+  }
+  
+  /* ---------- FORM ---------- */
+  .trip-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+  
+  .form-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    width: 100%;
+    flex-wrap: nowrap;
+  }
+  
+  .form-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  
+  label {
+    font-weight: 600;
+    font-size: 14px;
+    color: #333;
+  }
+  
+  .required {
+    color: red;
+  }
+  
+  /* ---------- INPUTS ---------- */
+  .input-wrapper {
+    position: relative;
+    width: 100%;
+  }
+  
+  input {
+    width: 100%;
+    padding: 12px 38px 12px 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f7f7f7;
+    font-size: 15px;
+    box-sizing: border-box;
+  }
+  
+  /* Suffix (ex: €) */
+  .suffix {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+    font-weight: bold;
+  }
+  
+  /* Icône à gauche */
+  .input-wrapper.left-icon input {
+    padding-left: 40px;
+  }
+  
+  .input-wrapper.left-icon .input-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    opacity: 0.6;
+  }
+  
+  /* ---------- TAGS ---------- */
+  .preferences {
+    margin-top: 5px;
+  }
+  
+  .tags {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 6px;
+  }
+  
+  .tag {
+    padding: 6px 14px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 13px;
+  }
+  
+  .tag-blue {
+    background-color: #e2ebff;
+    color: #1b3bbb;
+  }
+  
+  .tag-green {
+    background-color: #def5e4;
+    color: #2d995b;
+  }
+  
+  .tag-yellow {
+    background-color: #fff4d1;
+    color: #d8a200;
+  }
+  
+  .tag-orange {
+    background-color: #ffe3d3;
+    color: #e67c42;
+  }
+  
+  .tag-purple {
+    background-color: #f1e4ff;
+    color: #8d45c4;
+  }
+.tag-red {
+    background-color: #ffe0e0;
+    color: #d62828;
+  }
+  
+  .tag-teal {
+    background-color: #d9f7f7;
+    color: #008b8b;
+  }
+  
+  .tag-brown {
+    background-color: #f1e0d2;
+    color: #8b4513;
+  }
+  
+  .tag-pink {
+    background-color: #ffe4f0;
+    color: #c2185b;
+  }
+  
+  .tag-gray {
+    background-color: #ececec;
+    color: #555;
+  }
+  
+  .tag-cyan {
+    background-color: #d5f5f9;
+    color: #007c91;
+  }
+  
+  .tag-gold {
+    background-color: #fff5cc;
+    color: #b38f00;
+  }
+  
+  .tag-lime {
+    background-color: #e6fcd9;
+    color: #4a812f;
+  }
+  
+  .tag-indigo {
+    background-color: #e0e5ff;
+    color: #3f51b5;
+  }
+  
+  .tag-silver {
+    background-color: #f3f3f3;
+    color: #6b6b6b;
+  }
+  
+  
+  /* ---------- BUTTON ---------- */
+  .btn-primary {
+    margin-top: 25px;
+    background-color: #1b3bbb;
+    color: white;
+    font-weight: 700;
+    padding: 14px 0;
+    border: none;
+    border-radius: 18px;
+    font-size: 16px;
+    width: 100%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn-primary:hover {
+    background-color: #1835a2;
+  }
+  
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 768px) {
+    .form-row {
+      flex-direction: column;
+    }
+  }
+  
