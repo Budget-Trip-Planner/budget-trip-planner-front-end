@@ -48,26 +48,18 @@
               <input type="text" placeholder="jj/mm/aa" />
             </div>
           </div>
-          
-  
+
           <div class="preferences">
             <label>Préférences</label>
             <div class="tags">
-              <span class="tag tag-blue">Plage</span>
-              <span class="tag tag-green">Nature</span>
-              <span class="tag tag-yellow">Culture</span>
-              <span class="tag tag-orange">Gastronomie</span>
-              <span class="tag tag-purple">Shopping</span>
-              <span class="tag tag-red">Aventure</span>
-              <span class="tag tag-teal">Bien-être</span>
-              <span class="tag tag-brown">Histoire</span>
-              <span class="tag tag-pink">Romantique</span>
-              <span class="tag tag-gray">Affaires</span>
-              <span class="tag tag-cyan">Croisière</span>
-              <span class="tag tag-gold">Luxe</span>
-              <span class="tag tag-lime">Famille</span>
-              <span class="tag tag-indigo">Festivals</span>
-              <span class="tag tag-silver">Sport</span>
+              <span *ngFor ="let pref of preferences" (click)="togglePreference(pref)"
+               [class.selected]="selectedPreferences.includes(pref)" 
+               class="tag"
+               [ngClass]="getTagColor(pref)"
+               > {{pref}} </span>
+            </div>
+            <div *ngIf="errorMessage" class="error-message">
+              {{ errorMessage }}
             </div>
           </div>
   
