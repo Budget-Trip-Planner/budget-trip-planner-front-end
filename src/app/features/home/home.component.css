@@ -158,6 +158,7 @@ input {
 input[type="date"] {
   direction: rtl; 
   text-align: left;
+  color:"#C4C4C4";
 }
 
 .input-wrapper.date-icon input {
