@@ -13,6 +13,7 @@ export class HomeComponent {
   preferences = ['Plage', 'Nature', 'Culture', 'Gastronomie', 'Shopping', 'Aventure', 'Bien-être', 'Histoire', 'Romantique','Croisière', 'Luxe', 'Famille', 'Festivals', 'Sport'];
   selectedPreferences : string[] = [];
   errorMessage: string = '';
+  startDate: Date | null = null;
   togglePreference(preference : string) : void{
     const index = this.selectedPreferences.indexOf(preference);
     if (index >= 0) {

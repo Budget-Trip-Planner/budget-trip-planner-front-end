@@ -155,6 +155,24 @@ input {
   opacity: 0.6;
 }
 
+input[type="date"] {
+  direction: rtl; 
+  text-align: left;
+}
+
+.input-wrapper.date-icon input {
+  padding-left: 40px;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  position: absolute;
+  left: 12px;
+  right: auto;
+  transform: translateY(-50%);
+  top: 50%;
+  cursor: pointer;
+}
+
 /* ---------- TAGS ---------- */
 .tags {
   display: flex;
