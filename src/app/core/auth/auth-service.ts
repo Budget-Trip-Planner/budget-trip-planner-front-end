@@ -1,4 +1,3 @@
-// src/app/core/auth/auth.ts
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, tap, delay } from 'rxjs';
@@ -9,8 +8,6 @@ import { LoginRequest, RegisterRequest, AuthResponse } from '../models/auth';
 export class AuthService {
   private http = inject(HttpClient);
   private _tokenKey = 'bp_token';
-
-  // état de connexion (vrai si un token est présent en localStorage)
   private _isLoggedIn$ = new BehaviorSubject<boolean>(!!localStorage.getItem(this._tokenKey));
   isLoggedIn$ = this._isLoggedIn$.asObservable();
 
@@ -18,14 +15,17 @@ export class AuthService {
     return localStorage.getItem(this._tokenKey);
   }
 
-  // ------- MOCK (pour dev sans back). À remplacer par de vrais POST plus tard -------
-  private mockResp(email: string): AuthResponse {
-    return { token: 'MOCK.' + btoa(email) + '.JWT', userId: 1, email };
-  }
-
+  // ✅ Ajout de la méthode LOGIN (pour corriger ton erreur TS2339)
   login(body: LoginRequest): Observable<AuthResponse> {
-    // Version réelle (quand le back sera prêt) :
-    // return this.http.post<AuthResponse>(`${environment.apiUrl}/auth/login`, body)
+    // 👉 Version réelle (si ton backend est prêt)
+    // return this.http.post<AuthResponse>(`${environment.apiUrl}/auth/login`, body).pipe(
+    //   tap(res => {
+    //     localStorage.setItem(this._tokenKey, res.token);
+    //     this._isLoggedIn$.next(true);
+    //   })
+    // );
+
+    // 👉 Version mock (utile si ton backend n’est pas encore lancé)
     return of(this.mockResp(body.email)).pipe(
       delay(400),
       tap(res => {
@@ -35,9 +35,17 @@ export class AuthService {
     );
   }
 
+  // ✅ Méthode REGISTER
   register(body: RegisterRequest): Observable<AuthResponse> {
-    // Version réelle (quand le back sera prêt) :
-    // return this.http.post<AuthResponse>(`${environment.apiUrl}/auth/register`, body)
+    // 👉 Version réelle
+    // return this.http.post<AuthResponse>(`${environment.apiUrl}/auth/register`, body).pipe(
+    //   tap(res => {
+    //     localStorage.setItem(this._tokenKey, res.token);
+    //     this._isLoggedIn$.next(true);
+    //   })
+    // );
+
+    // 👉 Version mock (supprime ce bloc si tu utilises ton backend)
     return of(this.mockResp(body.email)).pipe(
       delay(500),
       tap(res => {
@@ -47,6 +55,12 @@ export class AuthService {
     );
   }
 
+  // ✅ Fonction interne pour simuler une réponse backend
+  private mockResp(email: string): AuthResponse {
+    return { token: 'MOCK.' + btoa(email) + '.JWT', userId: 1, email };
+  }
+
+  // ✅ Déconnexion
   logout(): void {
     localStorage.removeItem(this._tokenKey);
     this._isLoggedIn$.next(false);
