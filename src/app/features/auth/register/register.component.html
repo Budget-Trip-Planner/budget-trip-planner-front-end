@@ -8,15 +8,14 @@
     <div class="fields">
       <input type="text" formControlName="firstName" placeholder="Prénom" required />
       <input type="text" formControlName="lastName" placeholder="Nom" required />
+      <input type="text" formControlName="username" placeholder="Nom d’utilisateur" required /> <!-- ✅ -->
       <input type="email" formControlName="email" placeholder="Email" required />
 
       <input type="password" formControlName="password" placeholder="Mot de passe" required />
       <input type="password" formControlName="confirm" placeholder="Confirmer le mot de passe" required />
     </div>
 
-    <button type="submit" [disabled]="loading">
-      Créer mon compte
-    </button>
+    <button type="submit" [disabled]="loading">Créer mon compte</button>
 
     <p *ngIf="error" style="color:#ff6f00;">{{ error }}</p>
 

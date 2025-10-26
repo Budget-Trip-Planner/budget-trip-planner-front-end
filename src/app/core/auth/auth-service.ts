@@ -18,12 +18,12 @@ export class AuthService {
   // ✅ Ajout de la méthode LOGIN (pour corriger ton erreur TS2339)
   login(body: LoginRequest): Observable<AuthResponse> {
     // 👉 Version réelle (si ton backend est prêt)
-    // return this.http.post<AuthResponse>(`${environment.apiUrl}/auth/login`, body).pipe(
-    //   tap(res => {
-    //     localStorage.setItem(this._tokenKey, res.token);
-    //     this._isLoggedIn$.next(true);
-    //   })
-    // );
+    return this.http.post<AuthResponse>(`${environment.apiUrl}/auth/signin`, body).pipe(
+       tap(res => {
+         localStorage.setItem(this._tokenKey, res.token);
+         this._isLoggedIn$.next(true);
+       })
+     );
 
     // 👉 Version mock (utile si ton backend n’est pas encore lancé)
     return of(this.mockResp(body.email)).pipe(
@@ -38,21 +38,21 @@ export class AuthService {
   // ✅ Méthode REGISTER
   register(body: RegisterRequest): Observable<AuthResponse> {
     // 👉 Version réelle
-    // return this.http.post<AuthResponse>(`${environment.apiUrl}/auth/register`, body).pipe(
-    //   tap(res => {
-    //     localStorage.setItem(this._tokenKey, res.token);
-    //     this._isLoggedIn$.next(true);
-    //   })
-    // );
+    return this.http.post<AuthResponse>(`${environment.apiUrl}/auth/signup`, body).pipe(
+      tap(res => {
+         localStorage.setItem(this._tokenKey, res.token);
+         this._isLoggedIn$.next(true);
+       })
+     );
 
     // 👉 Version mock (supprime ce bloc si tu utilises ton backend)
-    return of(this.mockResp(body.email)).pipe(
+    /*return of(this.mockResp(body.email)).pipe(
       delay(500),
       tap(res => {
         localStorage.setItem(this._tokenKey, res.token);
         this._isLoggedIn$.next(true);
       })
-    );
+    );*/
   }
 
   // ✅ Fonction interne pour simuler une réponse backend
