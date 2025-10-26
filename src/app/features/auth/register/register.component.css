@@ -5,9 +5,14 @@
   display: flex;
   justify-content: center;
   align-items: center;
-    border-radius: 16px;
-  box-shadow: 0 0 40px rgba(0, 100, 255, 0.4); 
-  backdrop-filter: blur(2px);
+  position: relative;
+}
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .signup-card {
@@ -54,6 +59,24 @@
   gap: 0.75rem;
 }
 
+.signup-container::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 600px;
+  height: 350px;
+  background: url('/avion.png') no-repeat;
+  background-size: 480px 280px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+
+.overlay {
+  z-index: 2;
+}
+
 .fields input {
   padding: 0.8rem;
   border: 1px solid #ccc;
@@ -67,39 +90,47 @@
   box-shadow: 0 0 0 3px rgba(0, 188, 212, 0.15);
   outline: none;
 }
+.signup-form input:focus {
+  border-color: #0d47a1;
+  box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.15);
+  outline: none;
+}
 
 button {
-  color: white;
-  font-size: 20px;
-  border-radius: 60px;
-  border: 1px solid #2CBFA5;
   background: #0CA17E;
-  display: inline-flex;
-  height: 72px;
-  padding: 24px 152px;
-  justify-content: center;
-  align-items: center;
-  flex-shrink: 0;
+  color: white;
+  border: none;
+  border-radius: 2rem;
+  padding: 0.8rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  transition: background 0.3s ease, transform 0.2s ease;
 }
 
 button:hover {
-  background: linear-gradient(135deg, #009688, #00796b);
+  background: #0CA17E;
   transform: translateY(-2px);
 }
 
 .login-link {
   text-align: center;
   font-size: 0.9rem;
-  color: #333;
+  margin-top: 0.5rem;
+  color: #ff6f00;
 }
 
-.login-link {
-  display: block;
-  margin-top: 15px;
-  color: #ff6600; 
+.login-link a {
+  color: #ff6f00;
+  font-weight: 600;
   text-decoration: none;
-  font-size: 12px;
 }
+
+.login-link a:hover {
+  text-decoration: underline;
+}
+
 
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(20px); }
