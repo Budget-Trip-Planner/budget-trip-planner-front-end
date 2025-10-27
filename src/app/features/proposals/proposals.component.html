@@ -1,1 +1,32 @@
-<p>proposals works!</p>
+<div class="proposals-container">
+    <nav class="navbar">
+        <div class="nav-left">
+            <img src="en-voyageant.png" alt="Logo" class="nav-logo">
+            <span class="text-v">Voyageur</span>
+        </div>
+
+        <div class="nav-right">
+            <img src="profile-icon.png" alt="profil" (click)="goToProfile()" class="profile-icon"/>
+        </div>
+    </nav>
+
+    <div class="proposals-content">
+        <div class="title">
+            <span class="text-title">Nos propositions de voyage</span>
+            <img src="home-plane.png" alt="plane" class="proposals-plane"/>
+        </div>
+
+        <div class="trip-list">
+            <div class="trip-card" *ngFor="let trip of trips">
+                <img [src]="trip.image" [alt]="trip.destination" class="trip-image" />
+                <div class="trip-information">
+                    <span class="trip-destination" >{{trip.destination}}</span>
+                    <span class="trip-duration">Durée : {{trip.durationDays}} jours</span>
+                    <span class="trip-budget">Coût estimé : {{trip.estimatedCost}}€</span>
+                    <button class="btn-select" (click)="selectTrip(trip)">Sélectionner cette destination -></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

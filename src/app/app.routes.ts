@@ -6,6 +6,7 @@ import { Component } from '@angular/core';
 import { HomeComponent } from './features/home/home.component';
 import { ProposalsComponent } from './features/proposals/proposals.component';
 import { UserProfileComponent } from './features/user-profile/user-profile.component';
+import { DashboardComponent } from './features/dashboard/dashboard.component';
 
 
 export const routes: Routes = [
@@ -15,5 +16,6 @@ export const routes: Routes = [
   { path: 'home',component:HomeComponent},
   {path:'proposals',component:ProposalsComponent},
   { path: 'userProfile', component: UserProfileComponent,},
+  {path:'dashboard',component:DashboardComponent},
   { path: '**', redirectTo: 'auth/login' }
 ];
