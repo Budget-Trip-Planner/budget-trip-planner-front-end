@@ -5,6 +5,7 @@ import { authGuard } from './core/auth/auth-guard';
 import { Component } from '@angular/core';
 import { HomeComponent } from './features/home/home.component';
 import { ProposalsComponent } from './features/proposals/proposals.component';
+import { UserProfileComponent } from './features/user-profile/user-profile.component';
 
 @Component({
   standalone: true,
@@ -24,6 +25,7 @@ export const routes: Routes = [
   { path: 'auth/register', component: RegisterComponent },
   { path: 'home',component:HomeComponent},
   {path:'proposals',component:ProposalsComponent},
+  { path: 'userProfile', component: UserProfileComponent,},
   { path: 'dashboard', component: DashboardComponent, canActivate: [authGuard] },
   { path: '**', redirectTo: 'auth/login' }
 ];

@@ -56,6 +56,9 @@ export class HomeComponent {
     return colorMap[preference] || 'tag-gray';
   }
 
+  goToProfile() {
+    this.router.navigate(['userProfile']);
+  }
   createTrip() {
     if (!this.budget|| !this.duration|| !this.departureCity?.trim()) {
       this.errorMessage = 'Veuillez remplir tous les champs obligatoires';

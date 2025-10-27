@@ -25,6 +25,10 @@
   gap: 10px;
 }
 
+.nav-right{
+  cursor: pointer;
+
+}
 .nav-logo {
   width: 40px;
 }
