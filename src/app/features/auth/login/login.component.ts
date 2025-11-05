@@ -17,7 +17,7 @@ export class LoginComponent {
   private router = inject(Router);
 
   form = this.fb.group({
-    email: ['', [Validators.required, Validators.email]],
+    username: ['', [Validators.required]],
     password: ['', [Validators.required, Validators.minLength(6)]],
   });
   loading = false;
@@ -27,7 +27,7 @@ export class LoginComponent {
     if (this.form.invalid) { this.form.markAllAsTouched(); return; }
     this.loading = true; this.error = '';
     this.auth.login(this.form.getRawValue() as any).subscribe({
-      next: () => this.router.navigateByUrl('/dashboard'),
+      next: () => this.router.navigateByUrl('/home'),
       error: () => { this.error = 'Connexion échouée'; this.loading = false; }
     });
   }

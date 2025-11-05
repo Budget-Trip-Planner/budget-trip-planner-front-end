@@ -18,16 +18,21 @@ export class HomeService {
         destination: 'Rome',
         estimatedCost: 850,
         durationDays: data.duration,
+        image: '/destination/Rome.png'
       },
       {
         destination: 'Barcelone',
         estimatedCost: 780,
         durationDays: data.duration,
+        image: '/destination/Rome.png'
+
       },
       {
         destination: 'Lisbonne',
         estimatedCost: 720,
         durationDays: data.duration,
+        image: '/destination/Rome.png'
+
       }
     ];
 
