@@ -33,6 +33,27 @@ export class HomeService {
         durationDays: data.duration,
         image: '/destination/Rome.png'
 
+      },
+      {
+        destination: 'Lisbonne',
+        estimatedCost: 720,
+        durationDays: data.duration,
+        image: '/destination/Rome.png'
+
+      },
+      {
+        destination: 'Lisbonne',
+        estimatedCost: 720,
+        durationDays: data.duration,
+        image: '/destination/Rome.png'
+
+      },
+      {
+        destination: 'Lisbonne',
+        estimatedCost: 720,
+        durationDays: data.duration,
+        image: '/destination/Rome.png'
+
       }
     ];
 

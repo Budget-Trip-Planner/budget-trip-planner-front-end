@@ -79,7 +79,7 @@ export class RegisterComponent {
     this.auth.register(body as any).subscribe({
       next: () => {
         alert('Compte créé avec succès !');
-        this.router.navigateByUrl('/dashboard');
+        this.router.navigateByUrl('/auth/login');
       },
       error: (err) => {
         console.error('Erreur d’inscription :', err);
