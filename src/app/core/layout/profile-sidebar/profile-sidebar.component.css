@@ -30,14 +30,14 @@
 .sidebar-nav a {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start; /* Changé de 'center' à 'flex-start' */
   gap: 15px;
   padding: 16px 20px;
   text-decoration: none;
   color: #1F2937;
   font-weight: 700;
   font-size: 32px;
-  text-align: center;
+  /* 'text-align: center' a été supprimé */
   border-radius: 10px;
   transition: background-color 0.2s ease, color 0.2s ease;
 }
@@ -55,7 +55,7 @@
 .sidebar-footer {
   margin-top: auto;
   display: flex;
-  justify-content: center;
+  justify-content: center; /* Garde le bouton centré */
 }
 
 .logout-button {

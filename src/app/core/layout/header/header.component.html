@@ -21,7 +21,7 @@
 
   <div class="profile-container">
     <img
-      src= "/profile-icon.png"
+      [src]="userImageUrl ? userImageUrl : defaultAvatar"
       alt="Mon Profil"
       class="profile-icon"
       [routerLink]="['/userProfile']"

@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { UserService } from '../../services/user/user.service';
 
 @Component({
   selector: 'app-header',
@@ -13,8 +14,19 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
 
-  constructor() { }
+  userImageUrl: string | null = null;
+  defaultAvatar: string = '/profile-icon.png';
+
+  constructor(private userService: UserService) { }
+
+  ngOnInit(): void {
+    this.userService.currentUser$.subscribe(user => {
+      if (user) {
+        this.userImageUrl = user.imageUrl;
+      }
+    });
+  }
 
 }
