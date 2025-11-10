@@ -1,82 +1,57 @@
-<form *ngIf="user" #profileForm="ngForm" (ngSubmit)="onSubmit()" class="profile-form">
+<div class="profile-form" *ngIf="user">
 
   <div class="user-header">
-    <img src="assets/profile-icon.png" alt="Avatar" class="avatar">
-    <h3>{{ user.firstName + ' ' + user.lastName || 'Votre Nom' }}</h3>
+    <img
+      [src]="user.imageUrl ? user.imageUrl : defaultAvatar"
+      alt="Avatar"
+      class="avatar"
+    >
+    <h3>{{ user.firstName }} {{ user.lastName }}</h3>
     <p class="subtitle">Membre depuis 2025</p>
   </div>
 
-  <div class="form-group">
-    <label for="email">Email</label>
-    <input id="email"
-           type="email"
-           [(ngModel)]="user.mail"
-           name="email"
-           placeholder="sophie.dubois@gmail.com"
-           required>
-  </div>
+  <form (ngSubmit)="onSubmit()" #profileForm="ngForm">
 
-  <div class="form-group">
-    <label for="nom">Nom</label>
-    <input id="nom"
-           type="text"
-           [(ngModel)]="user.lastName"
-           name="nom"
-           placeholder="Dubois"
-           required>
-  </div>
-  <div class="form-group">
-    <label for="prenom">Prénom</label>
-    <input id="prenom"
-           type="text"
-           [(ngModel)]="user.firstName"
-           name="prenom"
-           placeholder="Sophie"
-           required>
-  </div>
-
-  <div class="form-group">
-    <label for="nomUtilisateur">Nom d'utilisateur</label>
-    <input id="nomUtilisateur"
-           type="text"
-           [(ngModel)]="user.username"
-           name="nomUtilisateur"
-           placeholder="Dubois5"
-           required>
-  </div>
-
-  <div class="form-row">
     <div class="form-group">
-      <label for="dateNaissance">Date de naissance</label>
-      <input id="dateNaissance"
-             type="text"
-             placeholder="jj/mm/aaaa"
-             [(ngModel)]="user.birthday"
-             name="dateNaissance">
+      <label for="mail">Email</label>
+      <input id="mail" type="email" name="mail" [(ngModel)]="user.mail" placeholder="sophie.dubois@gmail.com">
+    </div>
+
+
+    <div class="form-group">
+      <label for="lastName">Nom</label>
+      <input id="lastName" type="text" name="lastName" [(ngModel)]="user.lastName" placeholder="Dubois">
     </div>
     <div class="form-group">
-      <label for="pays">Pays</label>
-      <input id="pays"
-             type="text"
-             [(ngModel)]="user.location.country"
-             placeholder="France"
-             name="pays">
+      <label for="firstName">Prénom</label>
+      <input id="firstName" type="text" name="firstName" [(ngModel)]="user.firstName" placeholder="Sophie">
     </div>
-  </div>
 
-  <div class="form-group">
-    <label for="ville">Ville</label>
-    <input id="ville"
-           type="text"
-           [(ngModel)]="user.location.city"
-           placeholder="Paris"
-           name="ville">
-  </div>
 
-  <div class="form-actions">
-    <button type="submit" class="btn-primary" [disabled]="!profileForm.form.valid">
-      Enregistrer
-    </button>
-  </div>
+    <div class="form-group">
+      <label for="username">Nom d'utilisateur</label>
+      <input id="username" type="text" name="username" [(ngModel)]="user.username" placeholder="Dubois5">
+    </div>
 
-</form>
+    <div class="form-row">
+      <div class="form-group">
+        <label for="birthday">Date de naissance</label>
+        <input id="birthday" type="text" name="birthday" [(ngModel)]="user.birthday" placeholder="jj/mm/aaaa">
+      </div>
+      <div class="form-group">
+        <label for="country">Pays</label>
+        <input id="country" type="text" name="country" [(ngModel)]="user.location.country" placeholder="France">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="city">Ville</label>
+      <input id="city" type="text" name="city" [(ngModel)]="user.location.city" placeholder="Paris">
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn-primary" [disabled]="!profileForm.valid">Enregistrer</button>
+    </div>
+
+  </form>
+</div>
