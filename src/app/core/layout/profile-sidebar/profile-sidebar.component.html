@@ -1,0 +1,27 @@
+<div class="sidebar-container">
+  <nav class="sidebar-nav">
+    <ul>
+      <li>
+        <a [routerLink]="['/userProfile']" routerLinkActive="active">
+          <span>Mon profil</span>
+        </a>
+      </li>
+      <li>
+        <a [routerLink]="['/historique']" routerLinkActive="active">
+          <span>Voyages Passées</span>
+        </a>
+      </li>
+      <li>
+        <a [routerLink]="['/contact']" routerLinkActive="active">
+          <span>Contactez-nous</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="sidebar-footer">
+    <button (click)="logout()" class="logout-button">
+      <span>Log Out</span>
+    </button>
+  </div>
+</div>

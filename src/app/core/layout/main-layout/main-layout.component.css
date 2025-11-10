@@ -1,0 +1,31 @@
+:host {
+  display: block;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.layout-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: #F7F8FB;
+}
+
+.main-content-wrapper {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.sidebar-area {
+  flex-shrink: 0;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.content-area {
+  flex: 1;
+  overflow-y: auto;
+  height: calc(100vh - 163px);
+  background-color: #F7F8FB;
+}
