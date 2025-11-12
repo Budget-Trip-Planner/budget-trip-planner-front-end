@@ -19,14 +19,21 @@ export const routes: Routes = [
   { path: 'home', component: HomeComponent},
   { path: 'proposals', component: ProposalsComponent},
   { path: 'dashboard', component: DashboardComponent},
-  { path: 'history', component: HistoryComponent},
   { path: 'contactUs', component: ContactUsComponent},
-
   {
     path: '',
     component: MainLayoutComponent,
     children: [
-      { path: 'userProfile', component: UserProfileComponent },
+      {
+        path: 'userProfile',
+        component: UserProfileComponent,
+        data: { showSidebar: true }
+      },
+      {
+        path: 'history',
+        component: HistoryComponent,
+        data: {showSidebar: false},
+      }
     ]
   },
 

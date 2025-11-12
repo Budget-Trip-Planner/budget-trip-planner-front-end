@@ -15,9 +15,9 @@ import {User, UserService, Location} from '../../core/services/user/user.service
 })
 export class UserProfileComponent implements OnInit {
   user: User | null = null;
-  defaultAvatar: string = '/profile-icon.png'
 
-  constructor(private userService: UserService) {
+
+  constructor(public userService: UserService) {
   }
 
   ngOnInit() {

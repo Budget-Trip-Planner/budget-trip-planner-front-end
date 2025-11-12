@@ -21,6 +21,7 @@ export interface Location {
   providedIn: 'root'
 })
 export class UserService {
+  public defaultAvatar: string = '/profile-icon.png';
 
   private mockUser: User = {
     lastName: 'François',

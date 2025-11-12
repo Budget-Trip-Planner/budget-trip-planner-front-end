@@ -1,10 +1,11 @@
 <div class="layout-container">
-
   <app-header></app-header>
 
   <div class="main-content-wrapper">
 
-    <app-profile-sidebar class="sidebar-area"></app-profile-sidebar>
+    @if (showSidebar) {
+      <app-profile-sidebar class="sidebar-area"></app-profile-sidebar>
+    }
 
     <main class="content-area">
       <router-outlet></router-outlet>

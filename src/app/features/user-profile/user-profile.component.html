@@ -4,7 +4,7 @@
 
     <div class="avatar-container" (click)="fileInput.click()">
       <img
-        [src]="user.imageUrl ? user.imageUrl : defaultAvatar"
+        [src]="user.imageUrl ? user.imageUrl : userService.defaultAvatar"
         alt="Avatar"
         class="avatar"
       >

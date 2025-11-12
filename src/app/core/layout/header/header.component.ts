@@ -19,7 +19,7 @@ export class HeaderComponent implements OnInit {
   userImageUrl: string | null = null;
   defaultAvatar: string = '/profile-icon.png';
 
-  constructor(private userService: UserService) { }
+  constructor(public userService: UserService) { }
 
   ngOnInit(): void {
     this.userService.currentUser$.subscribe(user => {
