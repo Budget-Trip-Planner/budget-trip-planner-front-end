@@ -1,5 +1,12 @@
-import { Injectable } from '@angular/core';
-import { Observable, of, BehaviorSubject } from 'rxjs';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { environment } from '../../../../environments/environment';
+
+export interface Location {
+  city: string;
+  country: string;
+}
 
 export interface User {
   lastName: string;
@@ -12,41 +19,45 @@ export interface User {
   imageUrl: string;
 }
 
-export interface Location {
-  city: string;
-  country: string;
-}
-
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
+
+  private http = inject(HttpClient);
+  private _currentUser$ = new BehaviorSubject<User | null>(null);
+  public currentUser$ = this._currentUser$.asObservable();
+
   public defaultAvatar: string = '/profile-icon.png';
 
-  private mockUser: User = {
-    lastName: 'François',
-    firstName: 'Hollande',
-    username: 'Flamby',
-    mail: 'flamby@gmail.com',
-    phoneNumber: '0123456789',
-    birthday: '02/22/2002',
-    location: { country: 'France', city: 'Roubaix'},
-    imageUrl: 'https://i.pinimg.com/736x/a2/5b/3b/a25b3b53ac2a118bb6b2571d5369d2d5.jpg'
-  };
+  constructor() {}
 
-  private currentUserSubject = new BehaviorSubject<User>(this.mockUser);
-  public currentUser$ = this.currentUserSubject.asObservable();
-
-  constructor() { }
-
-  public getCurrentUser(): User {
-    return this.currentUserSubject.value;
+  // 📌 1. Charger l’utilisateur depuis l’API
+  loadUser(userId: number): Observable<User> {
+    return this.http.get<User>(`${environment.apiUrl}/users/${userId}/profile`)
+      .pipe(
+        tap(user => {
+          // fallback sécurité au cas où l'API renvoie null pour location
+          if (!user.location) {
+            user.location = { city: '', country: '' };
+          }
+          this._currentUser$.next(user);
+        })
+      );
   }
 
-  public updateUser(updatedUser: User): Observable<User> {
-    this.mockUser = {...this.mockUser, ...updatedUser};
-    this.currentUserSubject.next(updatedUser);
-    console.log(this.currentUserSubject.value);
-    return of(this.mockUser);
+  // 📌 2. Mettre à jour l’utilisateur (PUT)
+  updateUser(user: User, userId: number): Observable<User> {
+    return this.http.put<User>(`${environment.apiUrl}/users/${userId}/profile`, user)
+      .pipe(
+        tap(updated => {
+          this._currentUser$.next(updated);
+        })
+      );
+  }
+
+  // Accès direct (rarement utile mais ok)
+  getCurrentUser(): User | null {
+    return this._currentUser$.value;
   }
 }
