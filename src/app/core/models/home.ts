@@ -13,4 +13,5 @@ export interface TripResponse{
    endDate?:string;
    durationDays:number;
    image?:string;
+   country?:string;
 }

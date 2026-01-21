@@ -211,3 +211,46 @@ button:hover {
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
 }
 
+.status-message {
+  margin-top: 1rem;
+  font-weight: 600;
+  color: #23664b;
+}
+
+.empty-state {
+  max-width: 510px;
+  margin: 5rem auto;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+.empty-state p {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #1a202c;
+}
+
+.back-link {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.8rem 1.6rem;
+  border-radius: 10px;
+  background: #2b6cb0;
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.back-link:hover {
+  background: #1e4f8b;
+}
+
+button.save[disabled] {
+  opacity: 0.65;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+

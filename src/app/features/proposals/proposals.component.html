@@ -16,7 +16,12 @@
             <img src="home-plane.png" alt="plane" class="proposals-plane"/>
         </div>
 
-        <div class="trip-list">
+        <div *ngIf="missingStateMessage" class="empty-state">
+            <p>{{ missingStateMessage }}</p>
+            <button type="button" class="btn-home" (click)="goHome()">Creer un voyage</button>
+        </div>
+
+        <div class="trip-list" *ngIf="trips.length">
             <div class="trip-card" *ngFor="let trip of trips">
                 <img [src]="trip.image" [alt]="trip.destination" class="trip-image" />
                 <div class="trip-information">

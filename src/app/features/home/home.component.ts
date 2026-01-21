@@ -88,7 +88,11 @@ export class HomeComponent {
     this.homeService.createTrip(tripRequest).subscribe({
       next: (response) => {
         console.log(tripRequest);
-        this.router.navigate(['proposals'], { state: { trips: response } });
+        const criteria: TripRequest = {
+          ...tripRequest,
+          preferences: this.selectedPreferences.length ? [...this.selectedPreferences] : undefined
+        };
+        this.router.navigate(['proposals'], { state: { trips: response, criteria } });
       },
       error: (error) => {
         console.error('Erreur lors de la création du voyage :', error);

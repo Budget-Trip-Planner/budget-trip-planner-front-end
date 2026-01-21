@@ -1,36 +1,53 @@
-<div *ngIf="trip as t" class="dashboard">
-  <header class="header" [ngStyle]="{ background: headerBackground }">
-    <a routerLink="/proposals" class="back-btn">← Retour aux propositions</a>
+﻿<ng-container *ngIf="trip as t; else emptyState">
+  <div class="dashboard">
+    <header class="header" [ngStyle]="{ background: headerBackground }">
+      <a routerLink="/proposals" class="back-btn">Retour aux propositions</a>
 
-    <h1>{{ t.destination }} — {{ t.duree }} jours — {{ t.budget }}€</h1>
-    <p>{{ t.description }}</p>
-  </header>
+      <h1>{{ t.destination }} - {{ t.duree }} jours - {{ t.budget }} EUR</h1>
+      <p>{{ t.description }}</p>
+    </header>
 
-  <main class="content">
-    <section class="budget-card">
-      <h2>Répartition du budget</h2>
-      <div class="chart" [ngStyle]="{ background: chartGradient }">
-        {{ t.budget }} €
-      </div>
-
-      <div class="legend">
-        <div *ngFor="let item of t.repartition" class="legend-item">
-          <span class="color" [ngStyle]="{ background: item.couleur }"></span>
-          {{ item.label }} — {{ item.montant }} €
+    <main class="content">
+      <section class="budget-card">
+        <h2>Repartition du budget</h2>
+        <div class="chart" [ngStyle]="{ background: chartGradient }">
+          {{ t.budget }} EUR
         </div>
-      </div>
-    </section>
 
-    <section class="days">
-      <div *ngFor="let jour of t.jours" class="day-card">
-        <h3>{{ jour.titre }}</h3>
-        <p>{{ jour.activites.join(' • ') }}</p>
-      </div>
-    </section>
-  </main>
+        <div class="legend">
+          <div *ngFor="let item of t.repartition" class="legend-item">
+            <span class="color" [ngStyle]="{ background: item.couleur }"></span>
+            {{ item.label }} - {{ item.montant }} EUR
+          </div>
+        </div>
+      </section>
 
-  <div class="actions">
-    <button class="save">Enregistrer</button>
-    <button class="share">Partager</button>
+      <section class="days">
+        <div *ngFor="let jour of t.jours" class="day-card">
+          <h3>{{ jour.titre }}</h3>
+          <p>{{ jour.activites.join(' | ') }}</p>
+        </div>
+      </section>
+    </main>
+
+    <div class="actions">
+      <button
+        class="save"
+        type="button"
+        (click)="saveTrip()"
+        [disabled]="saving"
+      >
+        {{ saving ? 'Enregistrement...' : 'Enregistrer' }}
+      </button>
+      <button class="share" type="button" (click)="shareTrip()">Partager</button>
+    </div>
+    <p *ngIf="statusMessage" class="status-message">{{ statusMessage }}</p>
   </div>
-</div>
+</ng-container>
+
+<ng-template #emptyState>
+  <div class="empty-state">
+    <p>Aucune selection de voyage. Retournez aux propositions pour en choisir une.</p>
+    <a routerLink="/proposals" class="back-link">Voir les propositions</a>
+  </div>
+</ng-template>
