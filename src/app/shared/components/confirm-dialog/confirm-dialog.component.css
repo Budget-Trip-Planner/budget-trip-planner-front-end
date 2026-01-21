@@ -1,0 +1,83 @@
+/* =========================
+   DIALOG CONTAINER
+========================= */
+
+::ng-deep .mat-mdc-dialog-container {
+  border-radius: 20px;
+  padding: 32px 36px;
+  background: #ffffff;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.18);
+}
+
+/* =========================
+   TITLE
+========================= */
+
+::ng-deep h2[mat-dialog-title] {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 12px;
+}
+
+/* =========================
+   CONTENT
+========================= */
+
+::ng-deep mat-dialog-content {
+  font-size: 15px;
+  color: #4b5563;
+  line-height: 1.6;
+  margin-bottom: 28px;
+}
+
+/* =========================
+   ACTIONS
+========================= */
+
+::ng-deep mat-dialog-actions {
+  display: flex;
+  gap: 14px;
+}
+
+/* =========================
+   CANCEL BUTTON
+========================= */
+
+::ng-deep button[mat-button] {
+  border-radius: 999px;
+  padding: 10px 26px;
+  font-weight: 600;
+  color: #64748b;
+  background: #f1f5f9;
+  transition: all 0.2s ease;
+}
+
+::ng-deep button[mat-button]:hover {
+  background: #e2e8f0;
+}
+
+/* =========================
+   CONFIRM BUTTON
+========================= */
+
+::ng-deep button[mat-raised-button] {
+  border-radius: 999px;
+  padding: 10px 30px;
+  font-weight: 600;
+  background: #4ade80;
+  color: #ffffff;
+  box-shadow: 0 6px 18px rgba(74, 222, 128, 0.35);
+  transition: all 0.25s ease;
+}
+
+::ng-deep button[mat-raised-button]:hover {
+  background: #22c55e;
+  box-shadow: 0 10px 24px rgba(34, 197, 94, 0.45);
+  transform: translateY(-1px);
+}
+
+::ng-deep button[mat-raised-button]:active {
+  transform: translateY(0);
+  box-shadow: 0 6px 14px rgba(34, 197, 94, 0.4);
+}
