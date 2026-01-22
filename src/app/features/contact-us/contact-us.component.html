@@ -1,1 +1,41 @@
-<p>contact-us works!</p>
+<div class="contact-container">
+    <div class="contact-card">
+      <h2 class="contact-title">Contactez-nous</h2>
+      <p class="contact-subtitle">
+        Une question ? Notre équipe est là pour vous aider dans l’organisation de votre voyage
+      </p>
+  
+      <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="contact-form">
+
+        <div class="form-group">
+          <label>Nom Complet</label>
+          <input type="text" formControlName="fullName" placeholder="John Doe">
+        </div>
+      
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" formControlName="email" placeholder="sBx0A@example.com">
+        </div>
+      
+        <div class="form-group">
+          <label>Sujet</label>
+          <input type="text" formControlName="subject" placeholder="Mon sujet">
+        </div>
+      
+        <div class="form-group">
+          <label>Message</label>
+          <textarea rows="4" formControlName="message" placeholder="Dites nous ce que vous voulez ...."></textarea>
+        </div>
+      
+        <button type="submit" class="submit-button" [disabled]="isSending">
+          {{ isSending ? 'Envoi en cours...' : 'Envoyer le message' }}
+        </button>
+      
+        <p class="success-message" *ngIf="successMessage">
+          {{ successMessage }}
+        </p>
+      
+      </form>
+      
+    </div>
+  </div>

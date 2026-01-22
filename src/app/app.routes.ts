@@ -19,7 +19,6 @@ export const routes: Routes = [
   { path: 'home', component: HomeComponent},
   { path: 'proposals', component: ProposalsComponent},
   { path: 'dashboard', component: DashboardComponent},
-  { path: 'contactUs', component: ContactUsComponent},
   {
     path: '',
     component: MainLayoutComponent,
@@ -33,7 +32,12 @@ export const routes: Routes = [
         path: 'history',
         component: HistoryComponent,
         data: {showSidebar: false},
-      }
+      },
+      { path: 'contactUs', 
+        component: ContactUsComponent,
+        data : {showSidebar: true}
+      },
+
     ]
   },
 
