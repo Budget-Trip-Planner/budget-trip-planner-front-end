@@ -1,0 +1,54 @@
+:host {
+  display: block;
+  font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;
+}
+
+.trip-card-container {
+  background-color: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+.trip-card-container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
+}
+
+.trip-image {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  display: block;
+}
+
+.trip-info {
+  padding: 20px 25px;
+}
+
+.trip-destination {
+  margin: 0 0 15px 0;
+  font-size: 22px;
+  font-weight: 700;
+  color: #1F2937;
+  text-align: center;
+}
+
+.trip-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.trip-year, .trip-price {
+  font-size: 16px;
+  font-weight: 600;
+  color: #555;
+}
+
+.trip-price {
+  color: #1b3bbb;
+  font-size: 18px;
+}

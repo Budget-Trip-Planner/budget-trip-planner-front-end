@@ -1,0 +1,30 @@
+<nav class="main-header">
+  <div class="logo-container" [routerLink]="['/accueil']">
+    <img src="/planete-terre.png" alt="Icône voyage" class="header-icon" />
+    <span class="logo-text">Voyager</span>
+  </div>
+
+  <ul class="nav-links">
+    <li>
+      <a [routerLink]="['/accueil']" routerLinkActive="active">Accueil</a>
+    </li>
+    <li>
+      <a [routerLink]="['/explorer']" routerLinkActive="active">Explorer</a>
+    </li>
+    <li>
+      <a [routerLink]="['/communaute']" routerLinkActive="active">Communauté</a>
+    </li>
+    <li>
+      <a [routerLink]="['/messages']" routerLinkActive="active">Messages</a>
+    </li>
+  </ul>
+
+  <div class="profile-container">
+    <img
+      [src]="userImageUrl ? userImageUrl : userService.defaultAvatar"
+      alt="Mon Profil"
+      class="profile-icon"
+      [routerLink]="['/userProfile']"
+    >
+  </div>
+</nav>

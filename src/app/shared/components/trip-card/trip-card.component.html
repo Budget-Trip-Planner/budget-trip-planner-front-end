@@ -1,0 +1,10 @@
+<div class="trip-card-container">
+  <img [src]="trip.coverImage.url" alt="{{ trip.destination }}" class="trip-image">
+  <div class="trip-info">
+    <h3 class="trip-destination">{{ trip.destination }}</h3>
+    <div class="trip-details">
+      <span class="trip-year">{{ trip.startDate | date: 'y' }}</span>
+      <span class="trip-price">{{ trip.budgetTotal }}€</span>
+    </div>
+  </div>
+</div>

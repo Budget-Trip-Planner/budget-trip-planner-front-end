@@ -1,0 +1,53 @@
+:host {
+  display: block;
+  padding: 40px 60px;
+  box-sizing: border-box;
+  font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;
+}
+
+.user-header {
+  display: flex;
+  flex-direction: column; /* Changé de 'row' à 'column' */
+  justify-content: center;
+  align-items: center;
+  gap: 15px; /* Réduit l'espace vertical */
+  margin-bottom: 40px;
+}
+
+.avatar {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user-header h3 {
+  color: #000;
+  text-align: center;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  /* Laisser la largeur/hauteur s'adapter */
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.page-title {
+  color: #1F2937;
+  font-size: 48px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  margin: 0 0 30px 0;
+  padding-left: 50px;
+}
+
+.trips-grid {
+  display: grid;
+  padding-left: 50px;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 30px;
+}
