@@ -218,7 +218,7 @@ export class DashboardComponent implements OnInit {
     const destinationCountry = this.sourceTrip.country ?? 'France';
 
     const payload: ProposalPayload = {
-      objectType: 'proposal',
+      objectType: 'users',
       destination: {
         city: this.sourceTrip.destination,
         country: destinationCountry,
