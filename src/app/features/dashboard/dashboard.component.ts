@@ -51,31 +51,22 @@ export class DashboardComponent implements OnInit {
     });
     */
   ngOnInit(): void {
-    this.trip = {
-      destination: 'Rome',
-      duree: 5,
-      budget: 950,
-      description: 'Séjour de 5 jours dans la capitale italienne',
-      imageUrl:
-        'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Collage_Rome.jpg/1280px-Collage_Rome.jpg',
-      repartition: [
-        { label: 'Transports', montant: 237.5, couleur: '#48bb78' },
-        { label: 'Hôtel', montant: 285, couleur: '#ecc94b' },
-        { label: 'Restaurants', montant: 237.5, couleur: '#63b3ed' },
-        { label: 'Activités', montant: 190, couleur: '#f56565' },
-      ],
-      jours: [
-        { titre: 'Jour 1', activites: ['✈️ Vol', '🏨 Hôtel', '🍽️ Dîner'] },
-        { titre: 'Jour 2', activites: ['🏛️ Musée', '🍝 Déjeuner', '🎭 Soirée'] },
-        { titre: 'Jour 3', activites: ['⛲ Fontaine de Trevi', '🏛️ Panthéon', '🍦 Glace'] },
-        { titre: 'Jour 4', activites: ['🏟️ Colisée', '🏛️ Forum Romain', '🍕 Pizza'] },
-        { titre: 'Jour 5', activites: ['🛍️ Shopping', '✈️ Vol retour'] },
-      ],
-    };
+  const nav = this.router.getCurrentNavigation();
+  const state = (nav?.extras.state || history.state) as { trips: any[] };
+
+  if (state?.trips?.length) {
+    const proposal = state.trips[0];
+
+    this.trip = this.mapProposalToTrip(proposal);
 
     this.updateChartGradient();
     this.updateHeaderBackground();
+  } else {
+    console.warn('No trip data received');
   }
+}
+
+
 
   updateChartGradient(): void {
     if (!this.trip) return;
@@ -101,8 +92,52 @@ export class DashboardComponent implements OnInit {
       `url("${this.trip.imageUrl}") center / cover no-repeat`;
   }
 
-  goBack(): void {
+    goBack(): void {
     this.router.navigate(['/proposals']);
-    //Ici charger le fichier qui ressortira la liste des propositions de voyages ou les choix de l'utilisateur'
+  }
+
+  mapProposalToTrip(proposal: any): Trip {
+    return {
+      destination: proposal.destination.city,
+      duree: proposal.durationDays,
+      budget: proposal.budgetTotal,
+      description: `Séjour de ${proposal.durationDays} jours à ${proposal.destination.city}`,
+      imageUrl:
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Collage_Rome.jpg/1280px-Collage_Rome.jpg',
+
+      repartition: [
+        {
+          label: 'Transports',
+          montant: proposal.expense.transportAmount,
+          couleur: '#48bb78',
+        },
+        {
+          label: 'Hôtel',
+          montant: proposal.expense.hotelAmount,
+          couleur: '#ecc94b',
+        },
+        {
+          label: 'Restaurants',
+          montant: proposal.expense.restaurantAmount,
+          couleur: '#63b3ed',
+        },
+        {
+          label: 'Activités',
+          montant: proposal.expense.activitiesAmount,
+          couleur: '#f56565',
+        },
+      ],
+
+      jours: Object.entries(
+        proposal.itineraries.reduce((acc: any, item: any) => {
+          acc[item.dayNumber] ??= [];
+          acc[item.dayNumber].push(item.activity);
+          return acc;
+        }, {})
+      ).map(([day, acts]) => ({
+        titre: `Jour ${day}`,
+        activites: acts as string[],
+      })),
+    };
   }
 }
