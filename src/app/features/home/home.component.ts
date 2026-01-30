@@ -11,6 +11,7 @@ import { HomeService } from '../../core/home/home.service';
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
+
 export class HomeComponent {
   budget!: number;
   duration!: number;
@@ -18,7 +19,26 @@ export class HomeComponent {
   preferences = ['Plage', 'Nature', 'Culture', 'Gastronomie', 'Shopping', 'Aventure', 'Bien-être', 'Histoire', 'Romantique', 'Croisière', 'Luxe', 'Famille', 'Festivals', 'Sport'];
   selectedPreferences: string[] = [];
   errorMessage: string = '';
-  startDate!: Date;
+  startDate!: string;
+
+  private preferenceMap: Record<string, string> = {
+    'Plage': 'beach',
+    'Nature': 'nature',
+    'Culture': 'culture',
+    'Gastronomie': 'food',
+    'Shopping': 'shopping',
+    'Aventure': 'adventure',
+    'Bien-être': 'wellness',
+    'Bien-être': 'wellness',
+    'Histoire': 'history',
+    'Romantique': 'romantic',
+    'Croisière': 'cruise',
+    'Luxe': 'luxury',
+    'Famille': 'family',
+    'Festivals': 'festivals',
+    'Sport': 'sport'
+  };
+
 
   constructor(private router: Router, private homeService: HomeService) { }
   togglePreference(preference: string): void {
@@ -69,33 +89,32 @@ export class HomeComponent {
       this.errorMessage = 'Le budget doit être supérieur à 0 €';
       return;
     }
-  
+
     if (this.duration <= 0) {
       this.errorMessage = 'La durée du voyage doit être d’au moins 1 jour';
       return;
     }
-  
-    this.errorMessage = '';
-    
-    const tripRequest: TripRequest = {
-      budget: this.budget,
-      duration: this.duration,
-      departureCity: this.departureCity,
-      startDate: this.startDate,
-      preferences: this.selectedPreferences
-    }
 
-    this.homeService.createTrip(tripRequest).subscribe({
+    this.errorMessage = '';
+    const payload = {
+      budget: Number(this.budget),
+      duration: Number(this.duration),
+      departureCity: this.departureCity.trim(),
+      startDate: this.startDate || '2025-08-01',
+      preferences: (this.selectedPreferences.length ? this.selectedPreferences : ['Plage', 'Culture', 'Gastronomie'])
+        .map(p => this.preferenceMap[p])
+        .filter(Boolean)
+    };
+
+    this.homeService.createTrip(payload as any).subscribe({
       next: (response) => {
-        console.log(tripRequest);
+        console.log(payload);
         this.router.navigate(['proposals'], { state: { trips: response } });
       },
       error: (error) => {
         console.error('Erreur lors de la création du voyage :', error);
       }
-    }
-    );
+    });
   }
-
 
 }

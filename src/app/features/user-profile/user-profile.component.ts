@@ -15,7 +15,7 @@ import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/c
     FormsModule,
     MatDialogModule,
     MatButtonModule,
-    ConfirmDialogComponent
+
   ],
   templateUrl: './user-profile.component.html',
   styleUrl: './user-profile.component.css'
