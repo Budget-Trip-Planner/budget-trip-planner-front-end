@@ -62,7 +62,7 @@ export class RegisterComponent {
     // 👉 Map email (UI) -> mail (API)
     const body = {
       ...rest,
-      mail: email.trim(),
+      email: email.trim(),
       username: rest.username.trim(),
       firstName: rest.firstName.trim(),
       lastName: rest.lastName.trim(),
@@ -79,7 +79,7 @@ export class RegisterComponent {
     this.auth.register(body as any).subscribe({
       next: () => {
         alert('Compte créé avec succès !');
-        this.router.navigateByUrl('/dashboard');
+        this.router.navigateByUrl('/auth/login');
       },
       error: (err) => {
         console.error('Erreur d’inscription :', err);
