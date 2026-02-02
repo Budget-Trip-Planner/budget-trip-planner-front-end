@@ -109,7 +109,7 @@ export class HomeComponent {
     this.homeService.createTrip(payload as any).subscribe({
       next: (response) => {
         console.log(payload);
-        this.router.navigate(['proposals'], { state: { trips: [response] } });
+        this.router.navigate(['proposals'], { state: { trips: response } });
       },
       error: (error) => {
         console.error('Erreur lors de la création du voyage :', error);

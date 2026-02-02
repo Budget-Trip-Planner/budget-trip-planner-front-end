@@ -4,7 +4,7 @@ import { delay } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { TripResponse } from '../models/home';
 import { environment } from '../../../environments/environment';
-import { PROPOSAL_MOCK } from '../models/proposal.mock';
+import { PROPOSALS_MOCK } from '../models/proposal.mock';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +23,7 @@ export class HomeService {
 
     if (this.useMock) {
         console.log('MOCK MODE ACTIVE – proposal.mock.ts utilisé');
-        return of(PROPOSAL_MOCK).pipe(delay(600));
+        return of(PROPOSALS_MOCK).pipe(delay(600));
     }
 
     return this.http.post<TripResponse>(
