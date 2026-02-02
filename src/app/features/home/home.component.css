@@ -1,50 +1,16 @@
 /* ---------- CONTAINER ---------- */
+:host {
+  display: block;
+  width: 100%;
+}
+
 .home-container {
-  background-color: #f7f7f7;
-  min-height: 100vh;
+  background-color: var(--color-bg-sidebar); /* #F7F8FB */
+  /* Ajustement pour tenir exactement sous le header de 163px sans scroll inutile */
+  min-height: calc(100vh - 163px);
   display: flex;
   flex-direction: column;
-}
-
-/* ---------- NAVBAR ---------- */
-.navbar {
-  background-color: #1b3bbb;
-  width: 96%;
-  margin: 0px auto;
-  border-radius: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 40px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-}
-
-.nav-left {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.nav-right{
-  cursor: pointer;
-
-}
-.nav-logo {
-  width: 40px;
-}
-
-.text-v {
-  color: #fff;
-  font-family: 'Lucida Sans', sans-serif;
-  font-size: 22px;
-  font-weight: 700;
-}
-
-.profile-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
+  box-sizing: border-box;
 }
 
 /* ---------- CARD (FORM CONTAINER) ---------- */
@@ -52,14 +18,15 @@
   flex: 1;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start; /* Aligné en haut avec un padding pour plus de clarté */
+  padding: 40px 20px;
 }
 
 .home-card {
-  background-color: #fff;
+  background-color: var(--color-white);
   border-radius: 20px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  width: 80%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  width: 100%;
   max-width: 950px;
   padding: 50px 70px;
   display: flex;
@@ -77,10 +44,11 @@
 }
 
 .text-title {
-  color: #1b3bbb;
-  font-size: 24px;
+  color: var(--color-brand);
+  font-size: 28px;
   font-weight: 700;
   margin: 0;
+  text-align: center;
 }
 
 .home-plane {
@@ -101,7 +69,6 @@
   justify-content: space-between;
   gap: 24px;
   width: 100%;
-  flex-wrap: nowrap;
 }
 
 .form-group {
@@ -112,13 +79,13 @@
 }
 
 label {
-  font-weight: 600;
+  font-weight: 700;
   font-size: 14px;
   color: #333;
 }
 
 .required {
-  color: red;
+  color: #d93025;
 }
 
 /* ---------- INPUTS ---------- */
@@ -129,53 +96,56 @@ label {
 
 input {
   width: 100%;
-  padding: 12px 38px 12px 14px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background-color: #f7f7f7;
+  padding: 14px 18px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  background-color: #f9fafb;
   font-size: 15px;
+  font-family: var(--font-main);
   box-sizing: border-box;
+  transition: all 0.2s ease;
+}
+
+/* Augmentation du padding à droite pour les champs avec symbole/flèches */
+.input-wrapper input {
+  padding-right: 65px;
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--color-action);
+  background-color: var(--color-white);
+  box-shadow: 0 0 0 4px rgba(35, 114, 207, 0.1);
 }
 
 .suffix {
   position: absolute;
-  right: 12px;
+  /* On décale le symbole plus à gauche (environ 38px) pour laisser la place aux flèches du type "number" */
+  right: 38px;
   top: 50%;
   transform: translateY(-50%);
   color: #666;
-  font-weight: bold;
+  font-weight: 700;
+  pointer-events: none; /* Empêche le symbole de bloquer le clic sur les flèches */
 }
 
 .input-wrapper.left-icon input {
-  padding-left: 40px;
+  padding-left: 45px;
 }
 
 .input-wrapper.left-icon .input-icon {
   position: absolute;
-  left: 12px;
+  left: 15px;
   top: 50%;
   transform: translateY(-50%);
-  width: 18px;
-  opacity: 0.6;
+  width: 20px;
+  opacity: 0.7;
 }
 
+/* Style spécifique pour le champ date */
 input[type="date"] {
-  direction: rtl; 
+  direction: ltr;
   text-align: left;
-  color:"#C4C4C4";
-}
-
-.input-wrapper.date-icon input {
-  padding-left: 40px;
-}
-
-input[type="date"]::-webkit-calendar-picker-indicator {
-  position: absolute;
-  left: 12px;
-  right: auto;
-  transform: translateY(-50%);
-  top: 50%;
-  cursor: pointer;
 }
 
 /* ---------- TAGS ---------- */
@@ -187,13 +157,12 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 .tag {
-  padding: 6px 14px;
-  border-radius: 12px;
+  padding: 8px 16px;
+  border-radius: 20px;
   font-weight: 600;
   font-size: 13px;
   cursor: pointer;
   transition: all 0.2s ease;
-  user-select: none;
   border: 2px solid transparent;
 }
 
@@ -203,129 +172,69 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .tag.selected {
   border-color: currentColor;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
-  transform: scale(1.05);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Couleurs spécifiques */
-.tag-blue {
-  background-color: #e2ebff;
-  color: #1b3bbb;
-}
-
-.tag-green {
-  background-color: #def5e4;
-  color: #2d995b;
-}
-
-.tag-yellow {
-  background-color: #fff4d1;
-  color: #d8a200;
-}
-
-.tag-orange {
-  background-color: #ffe3d3;
-  color: #e67c42;
-}
-
-.tag-purple {
-  background-color: #f1e4ff;
-  color: #8d45c4;
-}
-
-.tag-red {
-  background-color: #ffe0e0;
-  color: #d93025;
-}
-
-.tag-teal {
-  background-color: #d4f5f3;
-  color: #138d81;
-}
-
-.tag-brown {
-  background-color: #ede0d4;
-  color: #6b4423;
-}
-
-.tag-pink {
-  background-color: #ffe0f0;
-  color: #c2185b;
-}
-
-.tag-gray {
-  background-color: #eeeeee;
-  color: #444;
-}
-
-.tag-cyan {
-  background-color: #d6f6ff;
-  color: #0288d1;
-}
-
-.tag-gold {
-  background-color: #fff3cd;
-  color: #b8860b;
-}
-
-.tag-lime {
-  background-color: #e8fdd2;
-  color: #5a8a00;
-}
-
-.tag-indigo {
-  background-color: #e1e0ff;
-  color: #3f51b5;
-}
-
-.tag-silver {
-  background-color: #f2f2f2;
-  color: #6e6e6e;
-}
+/* Variantes de couleurs pour les tags */
+.tag-blue { background-color: #e2ebff; color: #1b3bbb; }
+.tag-green { background-color: #def5e4; color: #2d995b; }
+.tag-yellow { background-color: #fff4d1; color: #d8a200; }
+.tag-orange { background-color: #ffe3d3; color: #e67c42; }
+.tag-purple { background-color: #f1e4ff; color: #8d45c4; }
+.tag-red { background-color: #ffe0e0; color: #d93025; }
+.tag-teal { background-color: #d4f5f3; color: #138d81; }
+.tag-brown { background-color: #ede0d4; color: #6b4423; }
+.tag-pink { background-color: #ffe0f0; color: #c2185b; }
+.tag-gray { background-color: #eeeeee; color: #444; }
+.tag-cyan { background-color: #d6f6ff; color: #0288d1; }
+.tag-gold { background-color: #fff3cd; color: #b8860b; }
+.tag-lime { background-color: #e8fdd2; color: #5a8a00; }
+.tag-indigo { background-color: #e1e0ff; color: #3f51b5; }
+.tag-silver { background-color: #f2f2f2; color: #6e6e6e; }
 
 /* ---------- ERROR MESSAGE ---------- */
 .error-message {
   color: #d93025;
   font-size: 14px;
-  margin-top: 6px;
+  margin-top: 10px;
   font-weight: 500;
-  animation: fadeIn 0.3s ease;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-5px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 /* ---------- BUTTON ---------- */
 .btn-primary {
-  margin-top: 25px;
-  background-color: #1b3bbb;
+  margin-top: 30px;
+  background-color: var(--color-brand);
   color: white;
   font-weight: 700;
-  padding: 14px 0;
+  padding: 18px 0;
   border: none;
-  border-radius: 18px;
-  font-size: 16px;
+  border-radius: 30px;
+  font-size: 18px;
   width: 100%;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  box-shadow: 0 4px 12px rgba(56, 78, 157, 0.2);
+  transition: all 0.2s ease;
 }
 
 .btn-primary:hover {
-  background-color: #1835a2;
+  filter: brightness(1.1);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(56, 78, 157, 0.3);
 }
 
 /* ---------- RESPONSIVE ---------- */
 @media (max-width: 768px) {
   .form-row {
     flex-direction: column;
+    gap: 22px;
+  }
+
+  .home-card {
+    padding: 30px 20px;
+    width: 95%;
+  }
+
+  .text-title {
+    font-size: 22px;
   }
 }

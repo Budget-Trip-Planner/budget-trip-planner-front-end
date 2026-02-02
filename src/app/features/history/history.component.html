@@ -1,20 +1,20 @@
-<div class="history-container" *ngIf="user">
-
+<div class="history-container">
   <div class="user-header">
-    <img
-      [src]="user.imageUrl ? user.imageUrl : userService.defaultAvatar"
-      alt="Avatar"
-      class="avatar"
-    >
-    <h3>{{ user.firstName }} {{ user.lastName }}</h3>
+    <h3>Mes Voyages</h3>
+    <p class="subtitle">Retrouvez ici tous vos souvenirs</p>
   </div>
 
-  <h2 class="page-title">Voyages passés</h2>
+  <div class="content-scroll">
+    <h2 class="page-title">Historique</h2>
 
-  <div class="trips-grid">
-    @for (trip of pastTrips; track trip.objectId) {
-      <app-trip-card [trip]="trip"></app-trip-card>
-    }
+    <div class="trips-grid">
+      @for (trip of pastTrips; track trip.objectId) {
+        <app-trip-card [trip]="trip"></app-trip-card>
+      } @empty {
+        <div class="empty-state">
+          <p>Vous n'avez pas encore de voyages enregistrés.</p>
+        </div>
+      }
+    </div>
   </div>
-
 </div>

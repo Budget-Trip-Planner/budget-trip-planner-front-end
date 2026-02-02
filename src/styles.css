@@ -1,8 +1,52 @@
-/* You can add global styles to this file, and also import other style files */
+/* --- DESIGN SYSTEM (VARIABLES GLOBALES) --- */
+:root {
+  /* --- PALETTE DE COULEURS --- */
+  /* Marque & Structure */
+  --color-brand: #384E9D;       /* Bleu Marque (Navbar, Sidebar, Titres principaux) */
+  --color-text-dark: #222222;   /* Texte foncé (Titres, Corps de texte) */
+  --color-white: #ffffff;
+
+  /* Actions & États */
+  --color-action: #2372CF;      /* Bleu Action (Inputs focus, Liens, Boutons secondaires) */
+  --color-success: #4ADE80;     /* Vert Validation (Boutons confirmer/enregistrer) */
+  --color-error: #d93025;       /* Rouge Erreur (Message d'erreur) */
+
+  /* Arrière-plans */
+  --color-bg-main: #f7f7f7;     /* Fond général des pages */
+  --color-bg-sidebar: #F7F8FB;  /* Fond spécifique Sidebar / Layout */
+  --color-border: #dddddd;      /* Bordures gris clair */
+
+  /* --- TYPOGRAPHIE --- */
+  --font-main: 'Inter', sans-serif;
+
+  /* --- TAILLES DE TEXTE (HIÉRARCHIE) --- */
+  --fs-xl: 48px;    /* Gros titres (Proposals, Page Title) */
+  --fs-lg: 28px;    /* Titres moyens (Sidebar, Login Header) */
+  --fs-md: 24px;    /* Sous-titres (Home Title, Sections) */
+  --fs-body: 18px;  /* Corps de texte standard */
+  --fs-sm: 14px;    /* Petits textes, labels */
+
+  /* --- RAYONS & OMBRES --- */
+  --radius-lg: 20px;
+  --radius-md: 12px;
+  --radius-btn: 33px;
+  --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --shadow-hover: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* --- RESET & BASE --- */
 html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-  }
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-main);
+  background-color: var(--color-bg-main);
+  color: var(--color-text-dark);
+  font-size: var(--fs-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Scrollbar moderne */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--color-bg-main); }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }

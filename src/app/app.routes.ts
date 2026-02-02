@@ -16,13 +16,13 @@ export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'auth/login'},
   { path: 'auth/login', component: LoginComponent},
   { path: 'auth/register', component: RegisterComponent},
-  { path: 'home', component: HomeComponent},
-  { path: 'proposals', component: ProposalsComponent},
+  { path: 'accueil', redirectTo: 'home', pathMatch: 'full' },
   { path: 'dashboard', component: DashboardComponent},
   { path: 'contactUs', component: ContactUsComponent},
   {
     path: '',
     component: MainLayoutComponent,
+    canActivate: [authGuard],
     children: [
       {
         path: 'userProfile',
@@ -32,12 +32,23 @@ export const routes: Routes = [
       {
         path: 'history',
         component: HistoryComponent,
+        data: {showSidebar: true},
+      },
+      {
+        path: 'home',
+        component: HomeComponent,
+        data: {showSidebar: false},
+      },
+      {
+        path: 'proposals',
+        component: ProposalsComponent,
         data: {showSidebar: false},
       }
+
     ]
   },
 
-  { path: '**', redirectTo: 'auth/login'}
+  { path: '**', redirectTo: 'home'}
 ];
 
 

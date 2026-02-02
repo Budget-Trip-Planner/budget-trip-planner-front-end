@@ -1,53 +1,52 @@
-<div class="proposals-container">
-  <nav class="navbar">
-    <div class="nav-left">
-      <img src="en-voyageant.png" alt="Logo" class="nav-logo">
-      <span class="text-v">Voyageur</span>
+<div class="proposals-card">
+  <!-- En-tête de la carte uniformisé avec le style de l'Historique -->
+  <div class="proposals-header">
+    <div class="title-group">
+      <h2 class="text-title">Nos propositions de voyage</h2>
+      <img src="home-plane.png" alt="avion" class="proposals-plane"/>
     </div>
+    <p class="subtitle">Sélectionnez la destination qui vous fait rêver</p>
+  </div>
 
-    <div class="nav-right">
-      <img
-        src="profile-icon.png"
-        alt="profil"
-        (click)="goToProfile()"
-        class="profile-icon"
-      />
-    </div>
-  </nav>
-
-  <div class="proposals-content">
-    <div class="title">
-      <span class="text-title">Nos propositions de voyage</span>
-      <img src="home-plane.png" alt="plane" class="proposals-plane"/>
-    </div>
-
-    <div class="trip-list">
+  <!-- Zone de défilement interne -->
+  <div class="content-scroll">
+    <div class="trip-grid">
+      <!-- Boucle *ngFor avec la logique de sécurité pour l'affichage des données -->
       <div class="trip-card" *ngFor="let trip of trips">
-        <!-- Image temporaire (mock) -->
-        <img
-          [src]="trip.coverImageUrl || 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Collage_Rome.jpg/1280px-Collage_Rome.jpg'"
-          [alt]="trip.destination.city"
-          class="trip-image"
-        />
+        <div class="image-container">
+          <img
+            [src]="trip.coverImageUrl || 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Collage_Rome.jpg/1280px-Collage_Rome.jpg'"
+            [alt]="trip.destination?.city || trip.destination"
+            class="trip-image"
+          />
+        </div>
 
-        <div class="trip-information">
-          <span class="trip-destination">
-            {{ trip.destination.city }}
-          </span>
+        <div class="trip-details">
+          <h3 class="trip-destination">
+            {{ trip.destination?.city || trip.destination }}
+          </h3>
 
-          <span class="trip-duration">
-            Durée : {{ trip.durationDays }} jours
-          </span>
+          <div class="info-row">
+            <span class="label">Durée :</span>
+            <span class="value">{{ trip.durationDays || trip.duration }} jours</span>
+          </div>
 
-          <span class="trip-budget">
-            Coût estimé : {{ trip.budgetTotal }} €
-          </span>
+          <div class="info-row">
+            <span class="label">Coût estimé :</span>
+            <span class="value price">{{ trip.budgetTotal || trip.cost }} €</span>
+          </div>
 
           <button class="btn-select" (click)="selectTrip(trip)">
-            Sélectionner cette destination ->
+            <span>Sélectionner cette destination</span>
+            <!-- La flèche SVG stylisée avec animation -->
+            <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
           </button>
         </div>
       </div>
+
+
     </div>
   </div>
 </div>

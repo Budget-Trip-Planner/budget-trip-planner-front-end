@@ -1,3 +1,4 @@
+/* ... Container identique au login ... */
 .signup-container {
   height: 100vh;
   width: 100%;
@@ -7,12 +8,14 @@
   align-items: center;
   position: relative;
 }
+
 .overlay {
   position: absolute;
   inset: 0;
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 2;
 }
 
 .signup-card {
@@ -29,125 +32,49 @@
   animation: fadeIn 0.6s ease-out;
 }
 
-.header {
-  text-align: center;
-}
-
-.header .icon {
-  font-size: 2.5rem;
-  margin-bottom: 0.5rem;
-}
-
 .header h2 {
-  color: #000;
+  color: var(--color-text-dark);
   text-align: center;
-  font-family: Inter;
-  font-size: 28px;
-  font-style: normal;
+  font-family: var(--font-main);
+  font-size: var(--fs-lg); /* 28px */
   font-weight: 700;
-  line-height: normal;
-}
-
-.header p {
-  color: #555;
-  font-size: 0.95rem;
-}
-
-.fields {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.signup-container::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 600px;
-  height: 350px;
-  background: url('/avion.png') no-repeat;
-  background-size: 480px 280px;
-  z-index: 1;
-  pointer-events: none;
-}
-
-
-.overlay {
-  z-index: 2;
 }
 
 .fields input {
   padding: 0.8rem;
-  border: 1px solid #ccc;
+  border: 1px solid var(--color-border);
   border-radius: 0.5rem;
   font-size: 1rem;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  font-family: var(--font-main);
+  transition: border-color 0.3s ease;
 }
 
 .fields input:focus {
-  border-color: #00bcd4;
-  box-shadow: 0 0 0 3px rgba(0, 188, 212, 0.15);
+  border-color: var(--color-action); /* Bleu Action pour focus */
   outline: none;
-}
-.signup-form input:focus {
-  border-color: #0d47a1;
-  box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.15);
-  outline: none;
+  box-shadow: 0 0 0 3px rgba(35, 114, 207, 0.15);
 }
 
 button {
-  background: #0CA17E;
-  color: white;
+  background: var(--color-success); /* Vert Validation */
+  color: var(--color-white);
   border: none;
   border-radius: 2rem;
   padding: 0.8rem;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
-  transition: background 0.3s ease, transform 0.2s ease;
+  box-shadow: var(--shadow-card);
+  transition: transform 0.2s ease;
 }
 
 button:hover {
-  background: #0CA17E;
   transform: translateY(-2px);
-}
-
-.login-link {
-  text-align: center;
-  font-size: 0.9rem;
-  margin-top: 0.5rem;
-  color: #ff6f00;
+  opacity: 0.9;
 }
 
 .login-link a {
   color: #ff6f00;
   font-weight: 600;
   text-decoration: none;
-}
-
-.login-link a:hover {
-  text-decoration: underline;
-}
-
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@media (max-width: 480px) {
-  .signup-card {
-    padding: 1.5rem;
-    border-radius: 1rem;
-  }
-
-  .header h2 {
-    font-size: 1.2rem;
-  }
-
-  .fields input {
-    font-size: 0.9rem;
-  }
 }

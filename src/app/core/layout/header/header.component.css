@@ -1,17 +1,17 @@
 :host {
   display: block;
   width: 100%;
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-main);
 }
 
 .main-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 163px;
+  height: 143px;
   width: 100%;
   padding: 0 60px;
-  background-color: #ffffff;
+  background-color: #f7f8fb;
   box-sizing: border-box;
 }
 
@@ -30,10 +30,10 @@
 }
 
 .logo-text {
-  font-family: 'Inter', sans-serif;
-  font-size: 40px;
+  font-family: var(--font-main);
+  font-size: 40px; /* Taille spécifique logo, proche du XL */
   font-weight: 700;
-  color: #1F2937;
+  color: var(--color-text-dark);
 }
 
 .nav-links {
@@ -47,27 +47,22 @@
 
 .nav-links a {
   text-decoration: none;
-  font-family: 'Inter', sans-serif;
-  color: #9CA3AF;
+  font-family: var(--font-main);
+  color: #9CA3AF; /* Gris clair pour inactif */
   font-weight: 700;
-  font-size: 30px;
+  font-size: var(--fs-lg); /* 28px */
   padding: 8px 0;
   border-bottom: 4px solid transparent;
-  transition: color 0.2s ease, border-color 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 .nav-links a:hover {
-  color: #1F2937;
+  color: var(--color-text-dark);
 }
 
 .nav-links a.active {
-  color: #1F2937;
-  border-bottom-color: #1F2937;
-}
-
-.profile-container {
-  display: flex;
-  align-items: center;
+  color: var(--color-text-dark);
+  border-bottom-color: var(--color-brand);
 }
 
 .profile-icon {
@@ -82,5 +77,5 @@
 
 .profile-icon:hover {
   transform: scale(1.1);
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-hover);
 }

@@ -8,7 +8,7 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  background-color: #F7F8FB;
+  background-color: var(--color-bg-sidebar); /* Fond global du layout */
 }
 
 .main-content-wrapper {
@@ -21,11 +21,12 @@
   flex-shrink: 0;
   height: 100%;
   overflow-y: auto;
+  background-color: var(--color-bg-sidebar); /* Spécifique Sidebar */
 }
 
 .content-area {
   flex: 1;
   overflow-y: auto;
   height: calc(100vh - 163px);
-  background-color: #F7F8FB;
+  background-color: var(--color-bg-main); /* Contenu principal en #f7f7f7 */
 }

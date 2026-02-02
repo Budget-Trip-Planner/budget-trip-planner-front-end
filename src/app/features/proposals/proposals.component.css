@@ -1,180 +1,204 @@
-/* ---------- CONTAINER ---------- */
-.proposals-container {
-    background-color: #f7f7f7;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+:host {
+  display: flex;
+  justify-content: center;
+  align-items: center; /* Centrage vertical si peu de contenu */
+  width: 100%;
+  height: calc(100vh - 163px);
+  background-color: var(--color-bg-sidebar); /* #F7F8FB */
+  font-family: var(--font-main);
+  padding: 20px;
+  box-sizing: border-box;
 }
 
-/* ---------- NAVBAR ---------- */
-.navbar {
-    background-color: #384E9D;
-    width: 96%;
-    margin: 0px auto;
-    border-radius: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px 40px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+.proposals-card {
+  width: 100%;
+  max-width: 950px; /* Réduit pour 3 tuiles plus petites */
+  background-color: var(--color-white);
+  padding: 30px 40px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
 }
 
-.nav-left {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+.proposals-header {
+  text-align: center;
+  margin-bottom: 25px;
+  flex-shrink: 0;
 }
 
-.nav-right {
-    cursor: pointer;
-
-}
-
-.nav-logo {
-    width: 40px;
-}
-
-.text-v {
-    color: #fff;
-    font-family: 'Lucida Sans', sans-serif;
-    font-size: 22px;
-    font-weight: 700;
-}
-
-.profile-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-/* ---------- TITLE ---------- */
-
-.title {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    margin-bottom: 40px;
-    padding-top: 50px;
+.title-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
 }
 
 .text-title {
-    color: #384E9D;
-    text-align: center;
-    font-family: Inter;
-    font-size: 48px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
+  color: #1b3bbb;
+  font-size: 32px; /* Légèrement réduit */
+  font-weight: 700;
+  margin: 0;
 }
 
 .proposals-plane {
-    width: 45px;
-    height: auto;
-  }
+  width: 38px;
+  height: auto;
+}
 
-/* ---------- PROPOSALS CONTENT ---------- */
-.proposals-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 40px 60px;
+.subtitle {
+  margin: 8px 0 0;
+  font-size: 16px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+/* ZONE DE CONTENU (FIXE SANS SCROLL SI POSSIBLE) */
+.content-scroll {
+  flex: 1;
+  padding: 5px;
+}
+
+/* GRILLE DE VOYAGES : FIXÉE À 3 COLONNES */
+.trip-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px; /* Gap réduit */
+  width: 100%;
+}
+
+/* TRIP CARD : PLUS COMPACTE */
+.trip-card {
+  background-color: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease;
+}
+
+.trip-card:hover {
+  transform: translateY(-5px);
+}
+
+.image-container {
+  height: 140px; /* Hauteur réduite pour des tuiles plus petites */
+  width: 100%;
+  overflow: hidden;
+}
+
+.trip-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.trip-details {
+  padding: 15px; /* Padding réduit */
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.trip-destination {
+  font-size: 19px; /* Taille réduite */
+  font-weight: 700;
+  color: #333;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.label {
+  color: #666;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.value {
+  color: #333;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.price {
+  color: #1b3bbb;
+  font-size: 15px;
+}
+
+/* BOUTON SELECT : PLUS COMPACT */
+.btn-select {
+  margin-top: 10px;
+  background-color: #1b3bbb;
+  color: white;
+  font-weight: 700;
+  padding: 10px; /* Réduit */
+  border: none;
+  border-radius: 10px;
+  font-size: 13px;
+  width: 100%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background-color 0.3s ease;
+  font-family: var(--font-main);
+}
+
+.btn-select:hover {
+  background-color: #1835a2;
+}
+
+.arrow-icon {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.3s ease;
+}
+
+.btn-select:hover .arrow-icon {
+  transform: translateX(3px);
+}
+
+.empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 40px;
+  color: #9ca3af;
+}
+
+.btn-back {
+  margin-top: 15px;
+  background: transparent;
+  border: 2px solid #1b3bbb;
+  color: #1b3bbb;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .trip-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
-  
-  /* ---------- TRIP LIST ---------- */
-  .trip-list {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 40px;
-    width: 100%;
-    max-width: 1200px;
+}
+
+@media (max-width: 600px) {
+  :host {
+    height: auto;
+    padding: 10px;
   }
-  
-  /* ---------- TRIP CARD ---------- */
-  .trip-card {
-    background-color: #ffffff;
-    border-radius: 20px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    width: 320px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-  
-  .trip-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-  }
-  
-  /* ---------- IMAGE ---------- */
-  .trip-image {
-    width: 100%;
-    height: 180px;
-    object-fit: cover;
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
-  }
-  
-  /* ---------- TRIP INFO ---------- */
-  .trip-information {
+  .proposals-card {
     padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
   }
-  
-  .trip-destination {
-    font-size: 20px;
-    font-weight: 700;
-    color: #2B2D42;
+  .trip-grid {
+    grid-template-columns: 1fr;
   }
-  
-  .trip-duration,
-  .trip-budget {
-    font-size: 15px;
-    color: #555;
-  }
-  
-  .trip-budget {
-    color: #384E9D;
-    font-weight: 600;
-  }
-  
-  /* ---------- BUTTON ---------- */
-  .btn-select {
-    background-color: #384E9D;
-    color: #ffffff;
-    font-weight: 600;
-    border: none;
-    border-radius: 12px;
-    padding: 12px 0;
-    cursor: pointer;
-    margin-top: 10px;
-    transition: background-color 0.3s ease;
-  }
-  
-  .btn-select:hover {
-    background-color: #2f3e90;
-  }
-  
-  /* ---------- RESPONSIVE ---------- */
-  @media (max-width: 1024px) {
-    .trip-list {
-      gap: 24px;
-    }
-  }
-  
-  @media (max-width: 768px) {
-    .trip-list {
-      flex-direction: column;
-      align-items: center;
-    }
-  
-    .trip-card {
-      width: 90%;
-    }
-  }
-  
+}
