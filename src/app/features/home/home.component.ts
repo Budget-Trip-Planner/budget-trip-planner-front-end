@@ -4,6 +4,8 @@ import { FormsModule, NgModel } from '@angular/forms';
 import { TripRequest } from '../../core/models/home';
 import { Router } from '@angular/router';
 import { HomeService } from '../../core/home/home.service';
+import { TripStoreService } from '../../core/services/trip-store.service';
+
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -40,7 +42,11 @@ export class HomeComponent {
   };
 
 
-  constructor(private router: Router, private homeService: HomeService) { }
+  constructor(
+  private router: Router,
+  private homeService: HomeService,
+  private tripStore: TripStoreService) {}
+
   togglePreference(preference: string): void {
     const index = this.selectedPreferences.indexOf(preference);
     if (index >= 0) {
@@ -109,7 +115,9 @@ export class HomeComponent {
     this.homeService.createTrip(payload as any).subscribe({
       next: (response) => {
         console.log(payload);
-        this.router.navigate(['proposals'], { state: { trips: response } });
+        this.tripStore.setTrips(response);
+        this.router.navigate(['proposals']);
+
       },
       error: (error) => {
         console.error('Erreur lors de la création du voyage :', error);

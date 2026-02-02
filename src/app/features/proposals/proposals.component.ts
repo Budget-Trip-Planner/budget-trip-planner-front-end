@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { TripStoreService } from '../../core/services/trip-store.service';
 
 @Component({
   selector: 'app-proposals',
@@ -9,14 +10,14 @@ import { CommonModule } from '@angular/common';
   styleUrl: './proposals.component.css'
 })
 export class ProposalsComponent {
-  trips!: any[];
+  trips: any[] = [];
 
-  constructor(private router: Router) {
-    const state = this.router.getCurrentNavigation()?.extras.state as { trips: any[] };
-
-    if (state) {
-      this.trips = state.trips;
-    }
+  constructor(
+    private router: Router,
+    private tripStore: TripStoreService
+  ) {
+    this.trips = this.tripStore.getTrips();
+    console.log('Trips depuis store:', this.trips);
   }
 
   goToProfile() {

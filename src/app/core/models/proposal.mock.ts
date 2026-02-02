@@ -1,100 +1,95 @@
-export const PROPOSALS_MOCK = [
+export interface Proposal {
+  objectType: 'proposal';
+  destination: { city: string; country: string };
+  departure: { city: string; country: string };
+  budgetTotal: number;
+  durationDays: number;
+  startDate: string; 
+  expense: {
+    transportAmount: number;
+    hotelAmount: number;
+    restaurantAmount: number;
+    activitiesAmount: number;
+    currency: 'EUR';
+  };
+  itineraries: { dayNumber: number; activity: string }[];
+  coverImageUrl?: string;
+}
+
+export const PROPOSALS_MOCK: Proposal[] = [
   {
     objectType: 'proposal',
     destination: { city: 'Rome', country: 'Italy' },
+    departure: { city: 'Paris', country: 'France' },
     budgetTotal: 850,
     durationDays: 5,
     startDate: '2025-04-15',
     expense: {
-      transportAmount: 212.5,
-      hotelAmount: 255,
-      restaurantAmount: 170,
-      activitiesAmount: 212.5,
-      currency: 'EUR',
-    },
-    itineraries: [
-      { dayNumber: 1, activity: 'Arrivée et installation à Rome' },
-      { dayNumber: 1, activity: 'Balade dans le centre historique' },
-      { dayNumber: 1, activity: 'Soirée gastronomique' },
-
-      { dayNumber: 2, activity: 'Découverte du quartier Trastevere' },
-      { dayNumber: 2, activity: 'Expérience gastronomie italienne' },
-      { dayNumber: 2, activity: 'Fontaine de Trevi de nuit' },
-
-      { dayNumber: 3, activity: 'Visite du Colisée' },
-      { dayNumber: 3, activity: 'Forum Romain' },
-      { dayNumber: 3, activity: 'Glace artisanale' },
-
-      { dayNumber: 4, activity: 'Vatican et Chapelle Sixtine' },
-      { dayNumber: 4, activity: 'Place Saint-Pierre' },
-      { dayNumber: 4, activity: 'Shopping souvenirs' },
-
-      { dayNumber: 5, activity: 'Marché local' },
-      { dayNumber: 5, activity: 'Départ' },
-    ],
-  },
-
-  {
-    objectType: 'proposal',
-    destination: { city: 'Barcelona', country: 'Spain' },
-    budgetTotal: 780,
-    durationDays: 4,
-    startDate: '2025-05-10',
-    expense: {
-      transportAmount: 180,
-      hotelAmount: 240,
+      transportAmount: 220,
+      hotelAmount: 290,
       restaurantAmount: 160,
-      activitiesAmount: 200,
-      currency: 'EUR',
+      activitiesAmount: 180,
+      currency: 'EUR'
     },
     itineraries: [
-      { dayNumber: 1, activity: 'Arrivée à Barcelone' },
-      { dayNumber: 1, activity: 'Plage Barceloneta' },
-      { dayNumber: 1, activity: 'Tapas le soir' },
-
-      { dayNumber: 2, activity: 'Sagrada Familia' },
-      { dayNumber: 2, activity: 'Parc Güell' },
-      { dayNumber: 2, activity: 'Quartier gothique' },
-
-      { dayNumber: 3, activity: 'Marché de la Boqueria' },
-      { dayNumber: 3, activity: 'Montjuïc' },
-      { dayNumber: 3, activity: 'Soirée rooftop' },
-
-      { dayNumber: 4, activity: 'Shopping' },
-      { dayNumber: 4, activity: 'Départ' },
+      { dayNumber: 1, activity: 'Arrivée & installation' },
+      { dayNumber: 2, activity: 'Colisée & Forum' },
+      { dayNumber: 3, activity: 'Vatican & Chapelle Sixtine' },
+      { dayNumber: 4, activity: 'Panthéon & Fontaine de Trevi' },
+      { dayNumber: 5, activity: 'Souvenirs & départ' }
     ],
+    coverImageUrl:
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Collage_Rome.jpg/1280px-Collage_Rome.jpg'
   },
 
   {
     objectType: 'proposal',
-    destination: { city: 'Lisbon', country: 'Portugal' },
-    budgetTotal: 720,
-    durationDays: 5,
-    startDate: '2025-06-01',
+    destination: { city: 'Prague', country: 'Czech Republic' },
+    departure: { city: 'Paris', country: 'France' },
+    budgetTotal: 700,
+    durationDays: 4,
+    startDate: '2025-09-18',
     expense: {
       transportAmount: 200,
       hotelAmount: 220,
-      restaurantAmount: 140,
+      restaurantAmount: 120,
       activitiesAmount: 160,
-      currency: 'EUR',
+      currency: 'EUR'
     },
     itineraries: [
-      { dayNumber: 1, activity: 'Arrivée à Lisbonne' },
-      { dayNumber: 1, activity: 'Quartier Alfama' },
-      { dayNumber: 1, activity: 'Dîner Fado' },
-
-      { dayNumber: 2, activity: 'Tour de Belém' },
-      { dayNumber: 2, activity: 'Pastéis de nata' },
-      { dayNumber: 2, activity: 'Balade en tramway' },
-
-      { dayNumber: 3, activity: 'LX Factory' },
-      { dayNumber: 3, activity: 'Mirador Santa Catarina' },
-
-      { dayNumber: 4, activity: 'Sintra (excursion)' },
-      { dayNumber: 4, activity: 'Palais colorés' },
-
-      { dayNumber: 5, activity: 'Derniers souvenirs' },
-      { dayNumber: 5, activity: 'Départ' },
+      { dayNumber: 1, activity: 'Vieille ville (soirée)' },
+      { dayNumber: 2, activity: 'Château de Prague' },
+      { dayNumber: 3, activity: 'Pont Charles & croisière' },
+      { dayNumber: 4, activity: 'Café & départ' }
     ],
+    coverImageUrl:
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Prague_collage_2019.png/1200px-Prague_collage_2019.png'
   },
+
+  {
+    objectType: 'proposal',
+    destination: { city: 'Athens', country: 'Greece' },
+    departure: { city: 'Paris', country: 'France' },
+    budgetTotal: 990,
+    durationDays: 7,
+    startDate: '2025-07-08',
+    expense: {
+      transportAmount: 260,
+      hotelAmount: 420,
+      restaurantAmount: 180,
+      activitiesAmount: 130,
+      currency: 'EUR'
+    },
+    itineraries: [
+      { dayNumber: 1, activity: 'Plaka & centre' },
+      { dayNumber: 2, activity: 'Acropole & musée' },
+      { dayNumber: 3, activity: 'Agora & Monastiraki' },
+      { dayNumber: 4, activity: 'Cap Sounion' },
+      { dayNumber: 5, activity: 'Street food & shopping' },
+      { dayNumber: 6, activity: 'Journée libre' },
+      { dayNumber: 7, activity: 'Départ' }
+    ],
+    coverImageUrl:
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Athens_montage_L.png/1200px-Athens_montage_L.png'
+  }
 ];
