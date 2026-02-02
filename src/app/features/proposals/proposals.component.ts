@@ -16,8 +16,12 @@ export class ProposalsComponent {
     private router: Router,
     private tripStore: TripStoreService
   ) {
-    this.trips = this.tripStore.getTrips();
-    console.log('Trips depuis store:', this.trips);
+    const raw = this.tripStore.getTrips();
+
+    this.trips = raw[0]?.proposals ?? raw;
+
+    console.log('Trips normalisés:', this.trips);
+
   }
 
   goToProfile() {

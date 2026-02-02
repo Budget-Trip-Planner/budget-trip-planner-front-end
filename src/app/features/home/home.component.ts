@@ -115,7 +115,7 @@ export class HomeComponent {
     this.homeService.createTrip(payload as any).subscribe({
       next: (response) => {
         console.log(payload);
-        this.tripStore.setTrips(response);
+        this.tripStore.setTrips(Array.isArray(response) ? response : [response]);
         this.router.navigate(['proposals']);
 
       },

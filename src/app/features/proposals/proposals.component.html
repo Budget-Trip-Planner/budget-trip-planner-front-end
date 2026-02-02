@@ -25,7 +25,7 @@
       <div class="trip-card" *ngFor="let trip of trips">
         <!-- Image temporaire (mock) -->
         <img
-          src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Collage_Rome.jpg/1280px-Collage_Rome.jpg"
+          [src]="trip.coverImageUrl || 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Collage_Rome.jpg/1280px-Collage_Rome.jpg'"
           [alt]="trip.destination.city"
           class="trip-image"
         />
