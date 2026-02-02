@@ -28,6 +28,11 @@ export class AuthService {
       );
   }
 
+  isLoggedIn(): boolean {
+    return !!localStorage.getItem('bp_token'); // ou ta clé réelle
+  }
+
+
   // REGISTER → appelle le backend
   register(body: RegisterRequest): Observable<AuthResponse> {
     return this.http

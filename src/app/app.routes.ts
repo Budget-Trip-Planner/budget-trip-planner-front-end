@@ -16,9 +16,6 @@ export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'auth/login'},
   { path: 'auth/login', component: LoginComponent},
   { path: 'auth/register', component: RegisterComponent},
-  { path: 'accueil', redirectTo: 'home', pathMatch: 'full' },
-  { path: 'dashboard', component: DashboardComponent},
-  { path: 'contactUs', component: ContactUsComponent},
   {
     path: '',
     component: MainLayoutComponent,
@@ -43,8 +40,23 @@ export const routes: Routes = [
         path: 'proposals',
         component: ProposalsComponent,
         data: {showSidebar: false},
-      }
-
+      },
+      {
+        path: 'dashboard',
+        component: DashboardComponent,
+        data: {showSidebar: false},
+      },
+      {
+        path: 'contactUs',
+        component: ContactUsComponent,
+        data: {showSidebar: true},
+      },
+      {
+        path: 'accueil',
+        redirectTo: 'home',
+        pathMatch: 'full',
+        data: {showSidebar: false},
+      },
     ]
   },
 
