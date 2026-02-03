@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { FormsModule, NgModel } from '@angular/forms';
-import { TripRequest } from '../../core/models/home';
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HomeService } from '../../core/home/home.service';
 import { TripStoreService } from '../../core/services/trip-store.service';
@@ -13,15 +12,15 @@ import { TripStoreService } from '../../core/services/trip-store.service';
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
-
 export class HomeComponent {
   budget!: number;
   duration!: number;
   departureCity!: string;
-  preferences = ['Plage', 'Nature', 'Culture', 'Gastronomie', 'Shopping', 'Aventure', 'Bien-être', 'Histoire', 'Romantique', 'Croisière', 'Luxe', 'Famille', 'Festivals', 'Sport'];
+  startDate!: string;
+
+  preferences = ['Plage', 'Nature', 'Culture', 'Gastronomie', 'Shopping', 'Aventure', 'Bien-être', 'Histoire', 'Romantique', 'Croisière', 'Luxe', 'Famille', 'Festivals', 'Sport'];
   selectedPreferences: string[] = [];
   errorMessage: string = '';
-  startDate!: string;
 
   private preferenceMap: Record<string, string> = {
     'Plage': 'beach',
@@ -30,7 +29,6 @@ export class HomeComponent {
     'Gastronomie': 'food',
     'Shopping': 'shopping',
     'Aventure': 'adventure',
-    'Bien-être': 'wellness',
     'Bien-être': 'wellness',
     'Histoire': 'history',
     'Romantique': 'romantic',
@@ -41,11 +39,11 @@ export class HomeComponent {
     'Sport': 'sport'
   };
 
-
   constructor(
-  private router: Router,
-  private homeService: HomeService,
-  private tripStore: TripStoreService) {}
+    private router: Router,
+    private homeService: HomeService,
+    private tripStore: TripStoreService
+  ) {}
 
   togglePreference(preference: string): void {
     const index = this.selectedPreferences.indexOf(preference);
@@ -85,8 +83,9 @@ export class HomeComponent {
   goToProfile() {
     this.router.navigate(['userProfile']);
   }
+
   createTrip() {
-    if (!this.budget|| !this.duration|| !this.departureCity?.trim()) {
+    if (!this.budget || !this.duration || !this.departureCity?.trim()) {
       this.errorMessage = 'Veuillez remplir tous les champs obligatoires';
       return;
     }
@@ -102,6 +101,7 @@ export class HomeComponent {
     }
 
     this.errorMessage = '';
+
     const payload = {
       budget: Number(this.budget),
       duration: Number(this.duration),
@@ -114,15 +114,16 @@ export class HomeComponent {
 
     this.homeService.createTrip(payload as any).subscribe({
       next: (response) => {
-        console.log(payload);
-        this.tripStore.setTrips(Array.isArray(response) ? response : [response]);
-        this.router.navigate(['proposals']);
+        console.log('Payload envoyé:', payload);
 
+        // Stockage des résultats dans le service dédié
+        this.tripStore.setTrips(Array.isArray(response) ? response : [response]);
+
+        this.router.navigate(['proposals']);
       },
       error: (error) => {
         console.error('Erreur lors de la création du voyage :', error);
       }
     });
   }
-
 }

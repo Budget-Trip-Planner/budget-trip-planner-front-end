@@ -6,6 +6,7 @@
   min-height: 100vh;
 }
 
+/* En-tête avec image de fond dynamique */
 .header {
   color: var(--color-white);
   text-align: center;
@@ -19,7 +20,7 @@
 }
 
 .header h1 {
-  font-size: var(--fs-xl);
+  font-size: var(--fs-xl); /* 48px */
   margin: 0;
   font-weight: 700;
 }
@@ -30,6 +31,7 @@
   margin-top: 0.5rem;
 }
 
+/* Grille principale */
 .content {
   display: grid;
   grid-template-columns: 350px 1fr;
@@ -39,7 +41,7 @@
   margin: 0 auto;
 }
 
-/* ---------- BUDGET CARD (RETOUR AU STYLE PRÉFÉRÉ) ---------- */
+/* ---------- BUDGET CARD ---------- */
 .budget-card {
   background: var(--color-white);
   border-radius: var(--radius-lg);
@@ -56,12 +58,13 @@
 }
 
 .budget-card h2 {
-  font-size: var(--fs-md);
+  font-size: var(--fs-md); /* 24px */
   margin-bottom: 1.5rem;
   color: var(--color-brand);
   font-weight: 600;
 }
 
+/* Graphique circulaire */
 .chart {
   width: 200px;
   height: 200px;
@@ -77,7 +80,7 @@
   background: #ddd; /* fallback */
 }
 
-/* LEGENDE GROUPÉE (STYLE ANCIEN) */
+/* Légende compacte (Style conservé) */
 .legend {
   margin-top: 1rem;
   text-align: left;
@@ -89,7 +92,7 @@
 .legend-item {
   display: flex;
   align-items: center;
-  gap: 0.5rem; /* Les éléments restent proches les uns des autres */
+  gap: 0.5rem;
   margin-bottom: 0.4rem;
   color: var(--color-text-dark);
 }
@@ -102,13 +105,7 @@
   flex-shrink: 0;
 }
 
-/* Couleurs du graphique */
-.green { background: #48bb78; }
-.yellow { background: #ecc94b; }
-.blue { background: #63b3ed; }
-.red { background: #f56565; }
-
-/* ---------- DAYS ---------- */
+/* ---------- DAYS (Liste des jours) ---------- */
 .days {
   display: flex;
   flex-direction: column;
@@ -125,7 +122,7 @@
 
 .day-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow-hover);
 }
 
 .day-card h3 {
@@ -141,7 +138,7 @@
   font-size: var(--fs-body);
 }
 
-/* ---------- ACTIONS ---------- */
+/* ---------- ACTIONS & BOUTONS ---------- */
 .actions {
   text-align: center;
   margin: 2.5rem 0 4rem;
@@ -164,7 +161,7 @@ button.save {
 }
 
 button.share {
-  background: #ffb703;
+  background: #ffb703; /* Couleur spécifique conservée */
   color: #000;
 }
 
@@ -173,11 +170,12 @@ button:hover {
   box-shadow: 0 5px 12px rgba(0, 0, 0, 0.15);
 }
 
+/* Bouton Retour (Absolu dans le header) */
 .back-btn {
   position: absolute;
   top: 1rem;
   left: 1rem;
-  background: rgba(30, 64, 175, 0.75);
+  background: rgba(30, 64, 175, 0.75); /* Fond semi-transparent pour aller sur l'image */
   color: var(--color-white);
   border: none;
   padding: 0.6rem 1.2rem;
@@ -195,6 +193,52 @@ button:hover {
   transform: translateY(-2px);
 }
 
+.status-message {
+  margin-top: 1rem;
+  font-weight: 600;
+  color: #23664b;
+  text-align: center;
+}
+
+/* État vide */
+.empty-state {
+  max-width: 510px;
+  margin: 5rem auto;
+  padding: 2rem;
+  background: var(--color-white);
+  border-radius: 20px;
+  box-shadow: var(--shadow-card);
+  text-align: center;
+}
+
+.empty-state p {
+  margin: 0;
+  font-size: 1.1rem;
+  color: var(--color-text-dark);
+}
+
+.back-link {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.8rem 1.6rem;
+  border-radius: 10px;
+  background: var(--color-brand);
+  color: var(--color-white);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.back-link:hover {
+  opacity: 0.9;
+}
+
+button.save[disabled] {
+  opacity: 0.65;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* ---------- RESPONSIVE ---------- */
 @media (max-width: 1024px) {
   .content {
     grid-template-columns: 1fr;
