@@ -1,7 +1,8 @@
-import { CommonModule } from '@angular/common';
+﻿import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { TripRequest } from '../../core/models/home';
 import { HomeService } from '../../core/home/home.service';
 import { TripStoreService } from '../../core/services/trip-store.service';
 
@@ -18,25 +19,40 @@ export class HomeComponent {
   departureCity!: string;
   startDate!: string;
 
-  preferences = ['Plage', 'Nature', 'Culture', 'Gastronomie', 'Shopping', 'Aventure', 'Bien-être', 'Histoire', 'Romantique', 'Croisière', 'Luxe', 'Famille', 'Festivals', 'Sport'];
+  preferences = [
+    'Plage',
+    'Nature',
+    'Culture',
+    'Gastronomie',
+    'Shopping',
+    'Aventure',
+    'Bien-être',
+    'Histoire',
+    'Romantique',
+    'Croisière',
+    'Luxe',
+    'Famille',
+    'Festivals',
+    'Sport',
+  ];
   selectedPreferences: string[] = [];
-  errorMessage: string = '';
+  errorMessage = '';
 
-  private preferenceMap: Record<string, string> = {
-    'Plage': 'beach',
-    'Nature': 'nature',
-    'Culture': 'culture',
-    'Gastronomie': 'food',
-    'Shopping': 'shopping',
-    'Aventure': 'adventure',
+  private readonly preferenceMap: Record<string, string> = {
+    Plage: 'beach',
+    Nature: 'nature',
+    Culture: 'culture',
+    Gastronomie: 'food',
+    Shopping: 'shopping',
+    Aventure: 'adventure',
     'Bien-être': 'wellness',
-    'Histoire': 'history',
-    'Romantique': 'romantic',
-    'Croisière': 'cruise',
-    'Luxe': 'luxury',
-    'Famille': 'family',
-    'Festivals': 'festivals',
-    'Sport': 'sport'
+    Histoire: 'history',
+    Romantique: 'romantic',
+    Croisière: 'cruise',
+    Luxe: 'luxury',
+    Famille: 'family',
+    Festivals: 'festivals',
+    Sport: 'sport',
   };
 
   constructor(
@@ -62,20 +78,20 @@ export class HomeComponent {
 
   getTagColor(preference: string): string {
     const colorMap: { [key: string]: string } = {
-      'Plage': 'tag-blue',
-      'Nature': 'tag-green',
-      'Culture': 'tag-yellow',
-      'Gastronomie': 'tag-orange',
-      'Shopping': 'tag-purple',
-      'Aventure': 'tag-red',
+      Plage: 'tag-blue',
+      Nature: 'tag-green',
+      Culture: 'tag-yellow',
+      Gastronomie: 'tag-orange',
+      Shopping: 'tag-purple',
+      Aventure: 'tag-red',
       'Bien-être': 'tag-teal',
-      'Histoire': 'tag-brown',
-      'Romantique': 'tag-pink',
-      'Croisière': 'tag-cyan',
-      'Luxe': 'tag-gold',
-      'Famille': 'tag-lime',
-      'Festivals': 'tag-indigo',
-      'Sport': 'tag-silver'
+      Histoire: 'tag-brown',
+      Romantique: 'tag-pink',
+      Croisière: 'tag-cyan',
+      Luxe: 'tag-gold',
+      Famille: 'tag-lime',
+      Festivals: 'tag-indigo',
+      Sport: 'tag-silver',
     };
     return colorMap[preference] || 'tag-gray';
   }
@@ -102,28 +118,40 @@ export class HomeComponent {
 
     this.errorMessage = '';
 
-    const payload = {
+    const tripRequest: TripRequest = {
       budget: Number(this.budget),
       duration: Number(this.duration),
       departureCity: this.departureCity.trim(),
-      startDate: this.startDate || '2025-08-01',
-      preferences: (this.selectedPreferences.length ? this.selectedPreferences : ['Plage', 'Culture', 'Gastronomie'])
-        .map(p => this.preferenceMap[p])
-        .filter(Boolean)
+      startDate: this.startDate ? new Date(this.startDate) : undefined,
+      preferences: this.resolvePreferenceCodes(),
     };
 
-    this.homeService.createTrip(payload as any).subscribe({
+    this.homeService.createTrip(tripRequest).subscribe({
       next: (response) => {
-        console.log('Payload envoyé:', payload);
+        this.tripStore.setTrips(response);
 
-        // Stockage des résultats dans le service dédié
-        this.tripStore.setTrips(Array.isArray(response) ? response : [response]);
+        const criteria: TripRequest = {
+          ...tripRequest,
+          preferences: tripRequest.preferences?.length ? [...tripRequest.preferences] : undefined,
+        };
 
-        this.router.navigate(['proposals']);
+        this.router.navigate(['proposals'], {
+          state: { trips: response, criteria },
+        });
       },
       error: (error) => {
         console.error('Erreur lors de la création du voyage :', error);
-      }
+      },
     });
+  }
+
+  private resolvePreferenceCodes(): string[] {
+    const basePreferences = this.selectedPreferences.length
+      ? this.selectedPreferences
+      : ['Plage', 'Culture', 'Gastronomie'];
+
+    return basePreferences
+      .map((preference) => this.preferenceMap[preference])
+      .filter(Boolean);
   }
 }

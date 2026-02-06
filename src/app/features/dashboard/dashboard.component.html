@@ -1,9 +1,9 @@
-<ng-container *ngIf="trip as t; else emptyState">
+﻿<ng-container *ngIf="!missingState && trip as t; else emptyState">
   <div class="dashboard">
     <header class="header" [ngStyle]="{ background: headerBackground }">
-      <a routerLink="/proposals" class="back-btn">← Retour aux propositions</a>
+      <a class="back-btn" (click)="goBack()">← Retour aux propositions</a>
 
-      <h1>{{ t.destination }} — {{ t.duree }} jours — {{ t.budget }}€</h1>
+      <h1>{{ t.destination }} — {{ t.duree }} jours — {{ t.budget }} €</h1>
       <p>{{ t.description }}</p>
     </header>
 
@@ -16,10 +16,8 @@
 
         <div class="legend">
           <div *ngFor="let item of t.repartition" class="legend-item">
-            <div class="legend-label">
-              <span class="color" [ngStyle]="{ background: item.couleur }"></span>
-              <span>{{ item.label }}</span>
-            </div>
+            <span class="color" [ngStyle]="{ background: item.couleur }"></span>
+            <span class="legend-label">{{ item.label }}</span>
             <span class="price-value">{{ item.montant }} €</span>
           </div>
         </div>
@@ -34,28 +32,19 @@
     </main>
 
     <div class="actions">
-      <!-- Bouton connecté à la logique de sauvegarde -->
-      <button
-        class="save"
-        (click)="saveTrip()"
-        [disabled]="saving"
-        [style.opacity]="saving ? '0.7' : '1'">
+      <button class="save" type="button" (click)="saveTrip()" [disabled]="saving">
         {{ saving ? 'Enregistrement...' : 'Enregistrer ce voyage' }}
       </button>
-
-      <button class="share" (click)="shareTrip()">Partager</button>
+      <button class="share" type="button" (click)="shareTrip()">Partager</button>
     </div>
 
-    <!-- Feedback utilisateur -->
-    <p *ngIf="statusMessage" class="status-message" style="text-align: center; color: var(--color-success); font-weight: 700;">
-      {{ statusMessage }}
-    </p>
+    <p *ngIf="statusMessage" class="status-message">{{ statusMessage }}</p>
   </div>
 </ng-container>
 
 <ng-template #emptyState>
   <div class="empty-state">
-    <p>Aucun voyage sélectionné.</p>
-    <a routerLink="/accueil" class="back-link">Retourner à l'accueil</a>
+    <p>Aucun voyage sélectionné. Retournez aux propositions pour en choisir un.</p>
+    <button class="back-link" type="button" (click)="goBack()">Retourner aux propositions</button>
   </div>
 </ng-template>

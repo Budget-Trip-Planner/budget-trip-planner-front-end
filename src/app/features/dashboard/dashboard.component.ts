@@ -1,11 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+﻿import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { TripRequest, TripResponse } from '../../core/models/home';
 import { ExpensePayload, ItineraryPayload, ProposalPayload } from '../../core/models/proposal';
 import { environment } from '../../../environments/environment';
-
 
 interface BudgetItem {
   label: string;
@@ -32,60 +31,55 @@ interface TripView {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent implements OnInit {
-
   trip: TripView | null = null;
-
-
   sourceTrip: TripResponse | null = null;
   searchCriteria: TripRequest | null = null;
-
-
   chartGradient = '';
   headerBackground = '';
+  missingState = false;
   saving = false;
   statusMessage = '';
 
+  private readonly offlineMockSave = false;
   private readonly budgetCategories = [
     { label: 'Transports', ratio: 0.25, couleur: '#48bb78' },
-    { label: 'Hôtel', ratio: 0.3, couleur: '#ecc94b' }, // Modifié 'Hotel' -> 'Hôtel'
+    { label: 'Hôtel', ratio: 0.3, couleur: '#ecc94b' },
     { label: 'Restaurants', ratio: 0.2, couleur: '#63b3ed' },
-    { label: 'Activités', ratio: 0.25, couleur: '#f56565' }, // Modifié 'Activites' -> 'Activités'
+    { label: 'Activités', ratio: 0.25, couleur: '#f56565' },
   ];
 
   constructor(private router: Router, private http: HttpClient) {}
 
   ngOnInit(): void {
     const nav = this.router.getCurrentNavigation();
+    const state = (nav?.extras.state || history.state) as {
+      trips?: TripResponse[];
+      trip?: TripResponse;
+      criteria?: TripRequest;
+    };
 
-    const state = (nav?.extras.state || history.state) as { trips?: any[], trip?: any, criteria?: any };
-
-    // Logique de récupération : on prend le premier élément du tableau trips
-    if (state?.trips && state.trips.length > 0) {
-      this.sourceTrip = state.trips[0];
-    } else if (state?.trip) {
+    if (state?.trip) {
       this.sourceTrip = state.trip;
+    } else if (state?.trips?.length) {
+      this.sourceTrip = state.trips[0];
     }
 
     this.searchCriteria = state?.criteria ?? null;
 
     if (!this.sourceTrip) {
-      console.warn('Aucune donnée de voyage reçue');
+      this.missingState = true;
       return;
     }
 
-
-    this.trip = this.buildTripFromResponse(this.sourceTrip!, this.searchCriteria);
-
+    this.trip = this.buildTripFromResponse(this.sourceTrip, this.searchCriteria);
     this.updateChartGradient();
     this.updateHeaderBackground();
   }
-
-
 
   private buildTripFromResponse(response: TripResponse, criteria: TripRequest | null): TripView {
     const budget = response.estimatedCost ?? 0;
@@ -96,7 +90,9 @@ export class DashboardComponent implements OnInit {
       duree: duration,
       budget,
       description: this.buildDescription(response, criteria),
-      imageUrl: response.image ?? 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Collage_Rome.jpg/1280px-Collage_Rome.jpg',
+      imageUrl:
+        response.image ??
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Collage_Rome.jpg/1280px-Collage_Rome.jpg',
       repartition: this.buildRepartition(budget),
       jours: this.buildJours(duration, criteria?.preferences, response.destination),
       startDate: this.normalizeDateString(response.startDate ?? criteria?.startDate),
@@ -104,25 +100,28 @@ export class DashboardComponent implements OnInit {
   }
 
   private buildDescription(response: TripResponse, criteria: TripRequest | null): string {
-    const departure = criteria?.departureCity ? criteria.departureCity : 'votre ville';
-    // Gestion propre des préférences
-    const prefs = criteria?.preferences?.length ? criteria.preferences : [];
-    const prefString = prefs.length > 0 ? prefs.slice(0, 3).join(', ') : 'un programme sur mesure';
+    const departure = criteria?.departureCity || 'votre ville';
+    const preferences = criteria?.preferences?.length ? criteria.preferences.slice(0, 3).join(', ') : 'un programme sur mesure';
 
-    return `Séjour de ${response.durationDays || 1} jours à ${response.destination} depuis ${departure}. (Thèmes : ${prefString})`;
+    return `Voyage de ${response.durationDays || 1} jours à ${response.destination} depuis ${departure} avec focus ${preferences}.`;
   }
 
   private buildRepartition(totalBudget: number): BudgetItem[] {
     const repartition: BudgetItem[] = [];
-    if (totalBudget <= 0) return repartition;
+
+    if (totalBudget <= 0) {
+      return this.budgetCategories.map((category) => ({ ...category, montant: 0 }));
+    }
 
     let remaining = totalBudget;
+
     this.budgetCategories.forEach((category, index) => {
       const isLast = index === this.budgetCategories.length - 1;
       const montant = isLast ? this.round2(remaining) : this.round2(totalBudget * category.ratio);
       remaining -= montant;
-      repartition.push({ ...category, montant });
+      repartition.push({ label: category.label, montant, couleur: category.couleur });
     });
+
     return repartition;
   }
 
@@ -132,21 +131,146 @@ export class DashboardComponent implements OnInit {
 
   private buildJours(duration: number, preferences: string[] | undefined, destination: string): Jour[] {
     const jours: Jour[] = [];
+
     for (let index = 0; index < duration; index++) {
-      const joursActivites = [
-        index === 0 ? `Arrivée à ${destination}` : 'Découverte locale',
-        'Visite culturelle ou détente',
-        'Dîner local'
+      const pref = preferences && preferences.length ? preferences[index % preferences.length] : '';
+      const activites = [
+        index === 0 ? `Arrivée et installation à ${destination}` : 'Découverte locale',
+        pref ? `Expérience ${pref}` : 'Programme libre',
+        index === duration - 1 ? 'Dernière soirée et départ' : 'Soirée gastronomique',
       ];
-      jours.push({ titre: `Jour ${index + 1}`, activites: joursActivites });
+      jours.push({ titre: `Jour ${index + 1}`, activites });
     }
+
     return jours;
   }
 
+  saveTrip(): void {
+    if (!this.trip || !this.sourceTrip) {
+      this.statusMessage = 'Sélectionnez un voyage pour pouvoir l’enregistrer.';
+      return;
+    }
+
+    const payload = this.buildProposalPayload();
+    if (!payload) {
+      this.statusMessage = 'Les données sont incomplètes pour enregistrer ce voyage.';
+      return;
+    }
+
+    this.saving = true;
+    this.statusMessage = '';
+
+    if (this.offlineMockSave) {
+      console.info('Mock save payload', payload);
+      setTimeout(() => {
+        this.statusMessage = 'Simulation : voyage enregistré (backend désactivé).';
+        this.saving = false;
+        this.router.navigate(['/history']);
+      }, 600);
+      return;
+    }
+
+    this.http.post(`${environment.apiUrl}/voyages/proposal`, payload).subscribe({
+      next: () => {
+        this.statusMessage = 'Voyage enregistré avec succès !';
+        this.saving = false;
+        setTimeout(() => this.router.navigate(['/historique']), 1000);
+      },
+      error: (err) => {
+        console.error('Erreur save:', err);
+        this.statusMessage = 'Erreur lors de l’enregistrement.';
+        this.saving = false;
+      },
+    });
+  }
+
+  private buildProposalPayload(): ProposalPayload | null {
+    if (!this.trip || !this.sourceTrip) {
+      return null;
+    }
+
+    const startDate = this.normalizeDateString(this.sourceTrip.startDate ?? this.searchCriteria?.startDate);
+    const destinationCountry = this.sourceTrip.country ?? 'France';
+
+    const payload: ProposalPayload = {
+      objectType: 'users',
+      destination: {
+        city: this.sourceTrip.destination,
+        country: destinationCountry,
+      },
+      budgetTotal: this.trip.budget,
+      durationDays: this.trip.duree,
+      startDate,
+      expense: this.buildExpensePayload(),
+      itineraries: this.buildItineraryPayload(),
+    };
+
+    if (this.searchCriteria?.departureCity) {
+      payload.departure = {
+        city: this.searchCriteria.departureCity,
+        country: 'France',
+      };
+    }
+
+    return payload;
+  }
+
+  private buildExpensePayload(): ExpensePayload {
+    const expense: ExpensePayload = {
+      transportAmount: 0,
+      hotelAmount: 0,
+      restaurantAmount: 0,
+      activitiesAmount: 0,
+      currency: 'EUR',
+    };
+
+    if (!this.trip) {
+      return expense;
+    }
+
+    this.trip.repartition.forEach((item) => {
+      const key = item.label.toLowerCase();
+      if (key.includes('transport')) {
+        expense.transportAmount = item.montant;
+      } else if (key.includes('hôtel') || key.includes('hotel')) {
+        expense.hotelAmount = item.montant;
+      } else if (key.includes('restaurant')) {
+        expense.restaurantAmount = item.montant;
+      } else if (key.includes('activité') || key.includes('activite')) {
+        expense.activitiesAmount = item.montant;
+      }
+    });
+
+    return expense;
+  }
+
+  private buildItineraryPayload(): ItineraryPayload[] {
+    if (!this.trip) {
+      return [];
+    }
+
+    return this.trip.jours.flatMap((jour, index) =>
+      jour.activites
+        .filter((activity) => activity && activity.trim().length > 0)
+        .map((activity) => ({
+          dayNumber: index + 1,
+          activity,
+        }))
+    );
+  }
 
   updateChartGradient(): void {
-    if (!this.trip) return;
+    if (!this.trip) {
+      this.chartGradient = '';
+      return;
+    }
+
     const total = this.trip.repartition.reduce((acc, item) => acc + item.montant, 0);
+    if (total === 0) {
+      this.chartGradient = '';
+      return;
+    }
+
     let current = 0;
     const segments: string[] = [];
 
@@ -156,70 +280,35 @@ export class DashboardComponent implements OnInit {
       segments.push(`${item.couleur} ${start.toFixed(2)}% ${end.toFixed(2)}%`);
       current += item.montant;
     }
+
     this.chartGradient = `conic-gradient(${segments.join(', ')})`;
   }
 
   updateHeaderBackground(): void {
-    if (!this.trip) return;
-    this.headerBackground = `linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.35)), url("${this.trip.imageUrl}") center / cover no-repeat`;
-  }
-
-  saveTrip(): void {
-    if (!this.trip || !this.sourceTrip) return;
-
-    this.saving = true;
-    this.statusMessage = '';
-
-
-    const payload = this.buildProposalPayload();
-    if(!payload) {
-      this.saving = false;
+    if (!this.trip) {
+      this.headerBackground = '';
       return;
     }
+    this.headerBackground =
+      `linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.35)), url("${this.trip.imageUrl}") center / cover no-repeat`;
+  }
 
-
-    this.http.post(`${environment.apiUrl}/voyages/proposal`, payload).subscribe({
-      next: () => {
-        this.statusMessage = 'Voyage enregistré avec succès !';
-        this.saving = false;
-        // Redirection vers l'historique après succès
-        setTimeout(() => this.router.navigate(['/historique']), 1000);
-      },
-      error: (err) => {
-        console.error('Erreur save:', err);
-        this.statusMessage = 'Erreur lors de l\'enregistrement.';
-        this.saving = false;
-      }
-    });
+  goBack(): void {
+    this.router.navigate(['/proposals']);
   }
 
   shareTrip(): void {
-    alert('Lien de partage copié dans le presse-papier !');
+    this.statusMessage = 'Partage non implémenté – copie le lien ou prends une capture !';
   }
 
   private normalizeDateString(value?: string | Date): string | undefined {
-    if (!value) return undefined;
+    if (!value) {
+      return undefined;
+    }
     const date = typeof value === 'string' ? new Date(value) : value;
-    return isNaN(date.getTime()) ? undefined : date.toISOString().split('T')[0];
-  }
-
-  private buildProposalPayload(): ProposalPayload | null {
-    if (!this.sourceTrip || !this.trip) return null;
-    return {
-      objectType: 'users',
-      destination: { city: this.sourceTrip.destination, country: this.sourceTrip.country || 'Unknown' },
-      budgetTotal: this.trip.budget,
-      durationDays: this.trip.duree,
-      startDate: this.normalizeDateString(new Date()),
-
-      expense: {
-        transportAmount: this.trip.repartition[0].montant,
-        hotelAmount: this.trip.repartition[1].montant,
-        restaurantAmount: this.trip.repartition[2].montant,
-        activitiesAmount: this.trip.repartition[3].montant,
-        currency: 'EUR'
-      },
-      itineraries: []
-    };
+    if (isNaN(date.getTime())) {
+      return undefined;
+    }
+    return date.toISOString().split('T')[0];
   }
 }

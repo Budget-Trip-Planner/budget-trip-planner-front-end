@@ -1,52 +1,42 @@
-<div class="proposals-card">
-  <!-- En-tête de la carte uniformisé avec le style de l'Historique -->
-  <div class="proposals-header">
-    <div class="title-group">
-      <h2 class="text-title">Nos propositions de voyage</h2>
-      <img src="home-plane.png" alt="avion" class="proposals-plane"/>
+﻿<div class="proposals-container">
+  <nav class="navbar">
+    <div class="nav-left">
+      <img src="en-voyageant.png" alt="Logo" class="nav-logo" />
+      <span class="text-v">Voyageur</span>
     </div>
-    <p class="subtitle">Sélectionnez la destination qui vous fait rêver</p>
-  </div>
 
-  <!-- Zone de défilement interne -->
-  <div class="content-scroll">
-    <div class="trip-grid">
-      <!-- Boucle *ngFor avec la logique de sécurité pour l'affichage des données -->
+    <div class="nav-right">
+      <img src="profile-icon.png" alt="profil" class="profile-icon" (click)="goToProfile()" />
+    </div>
+  </nav>
+
+  <div class="proposals-content">
+    <div class="title">
+      <span class="text-title">Nos propositions de voyage</span>
+      <img src="home-plane.png" alt="plane" class="proposals-plane" />
+    </div>
+
+    <div *ngIf="missingStateMessage" class="empty-state">
+      <p>{{ missingStateMessage }}</p>
+      <button type="button" class="btn-home" (click)="goHome()">Créer un voyage</button>
+    </div>
+
+    <div class="trip-list" *ngIf="trips.length">
       <div class="trip-card" *ngFor="let trip of trips">
-        <div class="image-container">
-          <img
-            [src]="trip.coverImageUrl || 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Collage_Rome.jpg/1280px-Collage_Rome.jpg'"
-            [alt]="trip.destination?.city || trip.destination"
-            class="trip-image"
-          />
-        </div>
-
-        <div class="trip-details">
-          <h3 class="trip-destination">
-            {{ trip.destination?.city || trip.destination }}
-          </h3>
-
-          <div class="info-row">
-            <span class="label">Durée :</span>
-            <span class="value">{{ trip.durationDays || trip.duration }} jours</span>
-          </div>
-
-          <div class="info-row">
-            <span class="label">Coût estimé :</span>
-            <span class="value price">{{ trip.budgetTotal || trip.cost }} €</span>
-          </div>
-
-          <button class="btn-select" (click)="selectTrip(trip)">
-            <span>Sélectionner cette destination</span>
-            <!-- La flèche SVG stylisée avec animation -->
-            <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
+        <img
+          [src]="trip.image || 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Collage_Rome.jpg/1280px-Collage_Rome.jpg'"
+          [alt]="trip.destination || 'destination'"
+          class="trip-image"
+        />
+        <div class="trip-information">
+          <span class="trip-destination">{{ trip.destination }}</span>
+          <span class="trip-duration">Durée : {{ trip.durationDays }} jours</span>
+          <span class="trip-budget">Coût estimé : {{ trip.estimatedCost || 0 }} €</span>
+          <button class="btn-select" type="button" (click)="selectTrip(trip)">
+            Sélectionner cette destination
           </button>
         </div>
       </div>
-
-
     </div>
   </div>
 </div>
