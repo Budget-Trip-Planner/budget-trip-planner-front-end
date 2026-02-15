@@ -1,14 +1,14 @@
 <div *ngIf="trip as t" class="dashboard">
   <header class="header" [ngStyle]="{ background: headerBackground }">
-    <a routerLink="/proposals" class="back-btn">← Retour aux propositions</a>
+    <a [routerLink]="backRoute" class="back-btn"><- Retour</a>
 
-    <h1>{{ t.destination }} — {{ t.duree }} jours — {{ t.budget }}€</h1>
+    <h1>{{ t.destination }} - {{ t.duree }} jours - {{ t.budget }}€</h1>
     <p>{{ t.description }}</p>
   </header>
 
   <main class="content">
     <section class="budget-card">
-      <h2>Répartition du budget</h2>
+      <h2>Repartition du budget</h2>
       <div class="chart" [ngStyle]="{ background: chartGradient }">
         {{ t.budget }} €
       </div>
@@ -16,7 +16,7 @@
       <div class="legend">
         <div *ngFor="let item of t.repartition" class="legend-item">
           <span class="color" [ngStyle]="{ background: item.couleur }"></span>
-          {{ item.label }} — {{ item.montant }} €
+          {{ item.label }} - {{ item.montant }} €
         </div>
       </div>
     </section>
@@ -30,7 +30,10 @@
   </main>
 
   <div class="actions">
-    <button class="save">Enregistrer</button>
+    <button class="save" (click)="saveTrip()" [disabled]="!canSave || isSaving">
+      {{ isSaving ? 'Enregistrement...' : 'Enregistrer' }}
+    </button>
     <button class="share">Partager</button>
+    <p *ngIf="saveError" class="save-error">{{ saveError }}</p>
   </div>
 </div>

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink } from '@angular/router'; 
-import { HttpClient } from '@angular/common/http';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ProposalPayload, TripService } from '../../core/services/trip/trip.service';
 
 interface BudgetItem {
   label: string;
@@ -36,42 +36,82 @@ export class DashboardComponent implements OnInit {
   chartGradient = '';
   headerBackground = '';
 
-  constructor(private router: Router) {}
-   // Exemple d'appel API pour récupérer le voyage depuis un backend
-    /*
-    this.http.get<Trip>('https://mon-api.com/api/trip/rome').subscribe({
-      next: (data) => {
-        this.trip = data;
-        this.updateChartGradient();
-        this.updateHeaderBackground();
-      },
-      error: (err) => {
-        console.error('Erreur lors de la récupération du voyage :', err);
-      }
-    });
-    */
+  canSave = false;
+  isSaving = false;
+  saveError = '';
+  backRoute = '/proposals';
+
+  private proposalSource: any | null = null;
+
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private tripService: TripService
+  ) {}
+
   ngOnInit(): void {
-  const nav = this.router.getCurrentNavigation();
-  const state = (nav?.extras.state || history.state) as { trips: any[] };
+    const nav = this.router.getCurrentNavigation();
+    const state = (nav?.extras.state || history.state) as { trips?: any[] };
 
-  if (state?.trips?.length) {
-    const proposal = state.trips[0];
+    if (state?.trips?.length) {
+      this.proposalSource = state.trips[0];
+      this.canSave = true;
+      this.backRoute = '/proposals';
+      this.applyProposal(this.proposalSource);
+      return;
+    }
 
-    this.trip = this.mapProposalToTrip(proposal);
+    const voyageId = Number(this.route.snapshot.paramMap.get('id'));
+    if (!Number.isNaN(voyageId) && voyageId > 0) {
+      this.tripService.getTripDetails(voyageId).subscribe({
+        next: proposal => {
+          this.proposalSource = proposal;
+          this.canSave = false;
+          this.backRoute = '/history';
+          this.applyProposal(proposal);
+        },
+        error: err => {
+          console.error('Erreur lors de la recuperation du detail du voyage :', err);
+        }
+      });
+      return;
+    }
 
-    this.updateChartGradient();
-    this.updateHeaderBackground();
-  } else {
     console.warn('No trip data received');
   }
-}
 
+  saveTrip(): void {
+    if (!this.canSave || !this.proposalSource || this.isSaving) {
+      return;
+    }
 
+    this.isSaving = true;
+    this.saveError = '';
+
+    this.tripService.saveSelectedTrip(this.proposalSource).subscribe({
+      next: () => {
+        this.isSaving = false;
+        this.router.navigate(['/history']);
+      },
+      error: err => {
+        console.error('Erreur lors de lenregistrement du voyage :', err);
+        this.isSaving = false;
+        this.saveError = 'Impossible denregistrer le voyage pour le moment.';
+      }
+    });
+  }
 
   updateChartGradient(): void {
-    if (!this.trip) return;
+    if (!this.trip) {
+      return;
+    }
 
     const total = this.trip.repartition.reduce((acc, item) => acc + item.montant, 0);
+    if (!total) {
+      this.chartGradient = '#ddd';
+      return;
+    }
+
     let current = 0;
     const segments: string[] = [];
 
@@ -86,58 +126,104 @@ export class DashboardComponent implements OnInit {
   }
 
   updateHeaderBackground(): void {
-    if (!this.trip) return;
+    if (!this.trip) {
+      return;
+    }
+
     this.headerBackground =
       `linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.35)), ` +
       `url("${this.trip.imageUrl}") center / cover no-repeat`;
   }
 
-    goBack(): void {
+  goBack(): void {
     this.router.navigate(['/proposals']);
   }
 
-  mapProposalToTrip(proposal: any): Trip {
-    return {
-      destination: proposal.destination.city,
-      duree: proposal.durationDays,
-      budget: proposal.budgetTotal,
-      description: `Séjour de ${proposal.durationDays} jours à ${proposal.destination.city}`,
-      imageUrl:
-        'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Collage_Rome.jpg/1280px-Collage_Rome.jpg',
+  private applyProposal(proposal: ProposalPayload | any): void {
+    this.trip = this.mapProposalToTrip(proposal);
+    this.updateChartGradient();
+    this.updateHeaderBackground();
+  }
 
+  private mapProposalToTrip(proposal: any): Trip {
+    const destination = this.getDestinationLabel(proposal?.destination);
+    const duration = Number(proposal?.durationDays ?? proposal?.duration ?? proposal?.duree ?? 0);
+    const budget = Number(proposal?.budgetTotal ?? proposal?.budget ?? 0);
+
+    const expense = proposal?.expense ?? {};
+    const itineraries = Array.isArray(proposal?.itineraries) ? proposal.itineraries : [];
+
+    return {
+      destination,
+      duree: duration,
+      budget,
+      description: `Sejour de ${duration} jours a ${destination}`,
+      imageUrl:
+        proposal?.coverImage?.url ||
+        proposal?.coverImageUrl ||
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Collage_Rome.jpg/1280px-Collage_Rome.jpg',
       repartition: [
         {
           label: 'Transports',
-          montant: proposal.expense.transportAmount,
+          montant: Number(expense.transportAmount ?? 0),
           couleur: '#48bb78',
         },
         {
-          label: 'Hôtel',
-          montant: proposal.expense.hotelAmount,
+          label: 'Hotel',
+          montant: Number(expense.hotelAmount ?? 0),
           couleur: '#ecc94b',
         },
         {
           label: 'Restaurants',
-          montant: proposal.expense.restaurantAmount,
+          montant: Number(expense.restaurantAmount ?? 0),
           couleur: '#63b3ed',
         },
         {
-          label: 'Activités',
-          montant: proposal.expense.activitiesAmount,
+          label: 'Activites',
+          montant: Number(expense.activitiesAmount ?? 0),
           couleur: '#f56565',
         },
       ],
-
-      jours: Object.entries(
-        proposal.itineraries.reduce((acc: any, item: any) => {
-          acc[item.dayNumber] ??= [];
-          acc[item.dayNumber].push(item.activity);
-          return acc;
-        }, {})
-      ).map(([day, acts]) => ({
-        titre: `Jour ${day}`,
-        activites: acts as string[],
-      })),
+      jours: this.mapItinerariesToDays(itineraries),
     };
+  }
+
+  private mapItinerariesToDays(itineraries: any[]): Jour[] {
+    const activitiesByDay: Record<number, string[]> = {};
+
+    for (const itinerary of itineraries) {
+      const dayNumber = Number(itinerary?.dayNumber ?? itinerary?.day ?? 0);
+      if (!dayNumber) {
+        continue;
+      }
+
+      const rawActivity = String(itinerary?.activity ?? '');
+      const activities = rawActivity
+        .split('|')
+        .map(activity => activity.trim())
+        .filter(Boolean);
+
+      activitiesByDay[dayNumber] ??= [];
+      activitiesByDay[dayNumber].push(...activities);
+    }
+
+    return Object.entries(activitiesByDay)
+      .sort(([a], [b]) => Number(a) - Number(b))
+      .map(([day, acts]) => ({
+        titre: `Jour ${day}`,
+        activites: acts,
+      }));
+  }
+
+  private getDestinationLabel(destination: any): string {
+    if (!destination) {
+      return '';
+    }
+
+    if (typeof destination === 'string') {
+      return destination;
+    }
+
+    return destination.city ?? '';
   }
 }

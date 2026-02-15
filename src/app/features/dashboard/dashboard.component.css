@@ -173,6 +173,19 @@ button:hover {
   box-shadow: 0 5px 12px rgba(0, 0, 0, 0.15);
 }
 
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.save-error {
+  color: #b91c1c;
+  margin-top: 0.75rem;
+  font-weight: 600;
+}
+
 .back-btn {
   position: absolute;
   top: 1rem;

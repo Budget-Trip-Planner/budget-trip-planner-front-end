@@ -47,6 +47,11 @@ export const routes: Routes = [
         data: {showSidebar: false},
       },
       {
+        path: 'dashboard/:id',
+        component: DashboardComponent,
+        data: {showSidebar: false},
+      },
+      {
         path: 'contactUs',
         component: ContactUsComponent,
         data: {showSidebar: true},
