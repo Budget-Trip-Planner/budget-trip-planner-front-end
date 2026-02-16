@@ -5,11 +5,14 @@ import { TripRequest } from '../../core/models/home';
 import { Router } from '@angular/router';
 import { HomeService } from '../../core/home/home.service';
 import { TripStoreService } from '../../core/services/trip-store.service';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { InfoDialogComponent } from '../../shared/components/info-dialog/info-dialog.component';
+
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, MatDialogModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
@@ -45,7 +48,8 @@ export class HomeComponent {
   constructor(
   private router: Router,
   private homeService: HomeService,
-  private tripStore: TripStoreService) {}
+  private tripStore: TripStoreService,
+  private dialog: MatDialog) {}
 
   togglePreference(preference: string): void {
     const index = this.selectedPreferences.indexOf(preference);
@@ -86,7 +90,8 @@ export class HomeComponent {
     this.router.navigate(['userProfile']);
   }
   createTrip() {
-    if (!this.budget|| !this.duration|| !this.departureCity?.trim()) {
+
+    if (!this.budget || !this.duration || !this.departureCity?.trim()) {
       this.errorMessage = 'Veuillez remplir tous les champs obligatoires';
       return;
     }
@@ -102,27 +107,50 @@ export class HomeComponent {
     }
 
     this.errorMessage = '';
+
+    const dialogRef = this.dialog.open(InfoDialogComponent, {
+      width: '420px',
+      data: {
+        title: 'Veuillez patienter',
+        message: 'Création des propositions en cours...'
+      },
+      disableClose: true
+    });
+
     const payload = {
       budget: Number(this.budget),
       duration: Number(this.duration),
       departureCity: this.departureCity.trim(),
       startDate: this.startDate || '2025-08-01',
-      preferences: (this.selectedPreferences.length ? this.selectedPreferences : ['Plage', 'Culture', 'Gastronomie'])
+      preferences: (this.selectedPreferences.length
+          ? this.selectedPreferences
+          : ['Plage', 'Culture', 'Gastronomie']
+      )
         .map(p => this.preferenceMap[p])
         .filter(Boolean)
     };
 
     this.homeService.createTrip(payload as any).subscribe({
-      next: (response) => {
-        console.log(payload);
-        this.tripStore.setTrips(Array.isArray(response) ? response : [response]);
-        this.router.navigate(['proposals']);
 
+      next: (response) => {
+        dialogRef.close();
+
+        this.tripStore.setTrips(
+          Array.isArray(response) ? response : [response]
+        );
+
+        this.router.navigate(['proposals']);
       },
+
       error: (error) => {
+        dialogRef.close();
+
         console.error('Erreur lors de la création du voyage :', error);
+        this.errorMessage = 'Impossible de créer les propositions pour le moment.';
       }
+
     });
   }
+
 
 }

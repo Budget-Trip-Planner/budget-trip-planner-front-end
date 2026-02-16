@@ -10,7 +10,7 @@ import { setProposalsFromApi, getProposals } from '../models/proposal.mock';
 })
 export class HomeService {
 
-  private useMock = true; // true = mock local, false = vraie API
+  private useMock = false; // true = mock local, false = vraie API
 
   constructor(private http: HttpClient) {}
 

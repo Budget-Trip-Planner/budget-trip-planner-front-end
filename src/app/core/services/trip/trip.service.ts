@@ -80,6 +80,7 @@ export class TripService {
 
   saveSelectedTrip(selectedProposal: any): Observable<Voyage> {
     const payload = this.buildSavePayload(selectedProposal);
+    console.log('json:', payload)
     return this.http.post<Voyage>(`${environment.apiUrl}/proposals`, payload);
   }
 

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ProposalPayload, TripService } from '../../core/services/trip/trip.service';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 
 interface BudgetItem {
   label: string;
@@ -17,6 +19,7 @@ interface Jour {
 interface Trip {
   destination: string;
   duree: number;
+  hotel: string;
   budget: number;
   description: string;
   imageUrl: string;
@@ -27,7 +30,7 @@ interface Trip {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, MatDialogModule],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
 })
@@ -46,7 +49,8 @@ export class DashboardComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private tripService: TripService
+    private tripService: TripService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -80,26 +84,40 @@ export class DashboardComponent implements OnInit {
     console.warn('No trip data received');
   }
 
+
   saveTrip(): void {
     if (!this.canSave || !this.proposalSource || this.isSaving) {
       return;
     }
 
-    this.isSaving = true;
-    this.saveError = '';
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '420px',
+      data: { message: 'Voulez-vous enregistrer ce voyage dans votre historique ?' },
+      disableClose: true
+    });
 
-    this.tripService.saveSelectedTrip(this.proposalSource).subscribe({
-      next: () => {
-        this.isSaving = false;
-        this.router.navigate(['/history']);
-      },
-      error: err => {
-        console.error('Erreur lors de lenregistrement du voyage :', err);
-        this.isSaving = false;
-        this.saveError = 'Impossible denregistrer le voyage pour le moment.';
+    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+      if (!confirmed) {
+        return;
       }
+
+      this.isSaving = true;
+      this.saveError = '';
+
+      this.tripService.saveSelectedTrip(this.proposalSource).subscribe({
+        next: () => {
+          this.isSaving = false;
+          this.router.navigate(['/history']);
+        },
+        error: err => {
+          console.error('Erreur lors de lenregistrement du voyage :', err);
+          this.isSaving = false;
+          this.saveError = 'Impossible denregistrer le voyage pour le moment.';
+        }
+      });
     });
   }
+
 
   updateChartGradient(): void {
     if (!this.trip) {
@@ -149,13 +167,14 @@ export class DashboardComponent implements OnInit {
     const destination = this.getDestinationLabel(proposal?.destination);
     const duration = Number(proposal?.durationDays ?? proposal?.duration ?? proposal?.duree ?? 0);
     const budget = Number(proposal?.budgetTotal ?? proposal?.budget ?? 0);
-
+    const hotel = proposal?.hotel ?? "ibis budget";
     const expense = proposal?.expense ?? {};
     const itineraries = Array.isArray(proposal?.itineraries) ? proposal.itineraries : [];
 
     return {
       destination,
       duree: duration,
+      hotel,
       budget,
       description: `Sejour de ${duration} jours a ${destination}`,
       imageUrl:

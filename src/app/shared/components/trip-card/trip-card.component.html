@@ -3,7 +3,7 @@
   <div class="trip-info">
     <h3 class="trip-destination">{{ destinationLabel }}</h3>
     <div class="trip-details">
-      <span class="trip-year">{{ trip.startDate | date: 'y' }}</span>
+      <span class="trip-year">{{ trip.startDate | date: 'dd/MM/yyyy' }}</span>
       <span class="trip-price">{{ trip.budgetTotal }}€</span>
     </div>
   </div>
