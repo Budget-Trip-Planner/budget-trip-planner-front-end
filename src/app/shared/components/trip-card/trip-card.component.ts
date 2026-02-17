@@ -17,6 +17,7 @@ export class TripCardComponent {
     budgetTotal: 0,
     durationDays: 0,
     startDate: '',
+    hotel:'',
     coverImage: null
   };
   @Output() tripClick = new EventEmitter<Voyage>();

@@ -5,14 +5,14 @@ import { Router } from '@angular/router';
 import { TripService, Voyage } from '../../core/services/trip/trip.service';
 
 @Component({
-  selector: 'app-history',
+  selector: 'app-futur',
   standalone: true,
   imports: [CommonModule, TripCardComponent],
-  templateUrl: './history.component.html',
-  styleUrl: './history.component.css'
+  templateUrl: './futur.component.html',
+  styleUrl: './futur.component.css'
 })
-export class HistoryComponent implements OnInit {
-  pastTrips: Voyage[] = [];
+export class FuturComponent implements OnInit{
+  futurTrips: Voyage[] = [];
 
 
   constructor(
@@ -21,13 +21,13 @@ export class HistoryComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.tripService.getPastTrips().subscribe({
+    this.tripService.getFuturTrips().subscribe({
       next: trips => {
-        this.pastTrips = trips;
+        this.futurTrips = trips;
       },
       error: err => {
-        console.error('Erreur lors du chargement de lhistorique :', err);
-        this.pastTrips = [];
+        console.error('Erreur lors du chargement des futurs voyage:', err);
+        this.futurTrips = [];
       }
     });
 
@@ -40,14 +40,14 @@ export class HistoryComponent implements OnInit {
 
     this.router.navigate(['/dashboard', trip.id]);
   }
-  public isPastTrip(dateString: string): boolean {
+  public isFuturTrip(dateString: string): boolean {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
     const tripDate = new Date(dateString);
     tripDate.setHours(0, 0, 0, 0);
 
-    return tripDate < today;
+    return tripDate > today;
   }
 
 }

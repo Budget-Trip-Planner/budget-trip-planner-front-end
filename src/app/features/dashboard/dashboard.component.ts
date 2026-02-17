@@ -103,7 +103,7 @@ export class DashboardComponent implements OnInit {
 
       this.isSaving = true;
       this.saveError = '';
-
+      console.log(this.proposalSource);
       this.tripService.saveSelectedTrip(this.proposalSource).subscribe({
         next: () => {
           this.isSaving = false;
@@ -174,7 +174,7 @@ export class DashboardComponent implements OnInit {
     return {
       destination,
       duree: duration,
-      hotel,
+      hotel : hotel,
       budget,
       description: `Sejour de ${duration} jours a ${destination}`,
       imageUrl:

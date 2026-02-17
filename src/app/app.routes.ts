@@ -11,6 +11,7 @@ import {HeaderComponent} from './core/layout/header/header.component';
 import {MainLayoutComponent} from './core/layout/main-layout/main-layout.component';
 import {HistoryComponent} from './features/history/history.component';
 import {ContactUsComponent} from './features/contact-us/contact-us.component';
+import {FuturComponent} from './features/futur/futur.component';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'auth/login'},
@@ -25,6 +26,11 @@ export const routes: Routes = [
         path: 'userProfile',
         component: UserProfileComponent,
         data: { showSidebar: true }
+      },
+      {
+        path: 'VoyageAVenir',
+        component: FuturComponent,
+        data: { showSidebar: false }
       },
       {
         path: 'history',

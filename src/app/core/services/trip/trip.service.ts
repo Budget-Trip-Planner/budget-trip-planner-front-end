@@ -41,6 +41,7 @@ export interface ProposalPayload {
   startDate?: string | null;
   coverImage?: CoverImage | null;
   expense?: Expense | null;
+  hotel: string;
   itineraries?: Itinerary[];
 }
 
@@ -50,6 +51,7 @@ export interface Voyage {
   objectId: number;
   departure?: Location | null;
   destination: Location | string;
+  hotel: string;
   budgetTotal: number;
   durationDays: number;
   startDate: string;
@@ -65,6 +67,16 @@ export class TripService {
   private authService = inject(AuthService);
 
   getPastTrips(): Observable<Voyage[]> {
+    const userId = this.authService.userId;
+
+    if (!userId) {
+      return of([]);
+    }
+
+    return this.http.get<Voyage[]>(`${environment.apiUrl}/users/${userId}/proposals`);
+  }
+
+  getFuturTrips(): Observable<Voyage[]> {
     const userId = this.authService.userId;
 
     if (!userId) {
@@ -98,6 +110,7 @@ export class TripService {
       startDate: selectedProposal?.startDate ?? null,
       coverImage,
       expense: this.normalizeExpense(selectedProposal?.expense),
+      hotel: selectedProposal.hotel,
       itineraries: this.normalizeItineraries(selectedProposal?.itineraries)
     };
   }
@@ -160,5 +173,6 @@ export class TripService {
         activity: String(itinerary.activity ?? '')
       }));
   }
+
 }
 
