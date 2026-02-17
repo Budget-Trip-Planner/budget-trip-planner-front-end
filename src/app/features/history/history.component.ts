@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { TripCardComponent } from '../../shared/components/trip-card/trip-card.component';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { TripCardComponent } from '../../shared/components/trip-card/trip-card.component';
 import { TripService, Voyage } from '../../core/services/trip/trip.service';
+import { map, shareReplay, catchError, of } from 'rxjs';
 
 @Component({
   selector: 'app-history',
@@ -11,35 +12,27 @@ import { TripService, Voyage } from '../../core/services/trip/trip.service';
   templateUrl: './history.component.html',
   styleUrl: './history.component.css'
 })
-export class HistoryComponent implements OnInit {
-  pastTrips: Voyage[] = [];
+export class HistoryComponent {
 
+  private tripService = inject(TripService);
+  private router = inject(Router);
 
-  constructor(
-    private tripService: TripService,
-    private router: Router
-  ) {}
-
-  ngOnInit(): void {
-    this.tripService.getPastTrips().subscribe({
-      next: trips => {
-        this.pastTrips = trips;
-      },
-      error: err => {
-        console.error('Erreur lors du chargement de lhistorique :', err);
-        this.pastTrips = [];
-      }
-    });
-
-  }
+  // ✅ Stream des voyages déjà filtrés "passés"
+  readonly pastTrips$ = this.tripService.getPastTrips().pipe(
+    map((trips: Voyage[]) => trips.filter(t => this.isPastTrip(t.startDate))),
+    catchError(err => {
+      console.error("Erreur lors du chargement de l'historique :", err);
+      return of([] as Voyage[]);
+    }),
+    shareReplay(1)
+  );
 
   openTripDetails(trip: Voyage): void {
-    if (!trip?.id) {
-      return;
-    }
-
+    if (!trip?.id) return;
     this.router.navigate(['/dashboard', trip.id]);
   }
+
+  // (tu peux garder cette méthode, elle sert au filtre)
   public isPastTrip(dateString: string): boolean {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -49,5 +42,4 @@ export class HistoryComponent implements OnInit {
 
     return tripDate < today;
   }
-
 }

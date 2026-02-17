@@ -33,7 +33,7 @@ export class UserService {
   constructor() {}
 
   // 📌 1. Charger l’utilisateur depuis l’API
-  loadUser(userId: number): Observable<User> {
+  loadUser(userId: number ): Observable<User> {
     return this.http.get<User>(`${environment.apiUrl}/users/${userId}/profile`)
       .pipe(
         tap(user => {

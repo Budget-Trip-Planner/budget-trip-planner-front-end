@@ -8,16 +8,24 @@
     <h2 class="page-title">Historique</h2>
 
     <div class="trips-grid">
-      @for (trip of pastTrips; track trip.id) {
-        @if (isPastTrip(trip.startDate)){
-          <app-trip-card [trip]="trip" (tripClick)="openTripDetails($event)"></app-trip-card>
+      @if (pastTrips$ | async; as pastTrips) {
+
+        @for (trip of pastTrips; track trip.id) {
+          <app-trip-card
+            [trip]="trip"
+            (tripClick)="openTripDetails($event)">
+          </app-trip-card>
+        } @empty {
+          <div class="empty-state">
+            <p>Vous n'avez pas encore de voyages enregistrés.</p>
+          </div>
         }
-      } @empty {
+
+      } @else {
         <div class="empty-state">
-          <p>Vous n'avez pas encore de voyages enregistrés.</p>
+          <p>Chargement...</p>
         </div>
       }
     </div>
   </div>
 </div>
-

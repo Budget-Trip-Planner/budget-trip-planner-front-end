@@ -12,6 +12,8 @@ import {MainLayoutComponent} from './core/layout/main-layout/main-layout.compone
 import {HistoryComponent} from './features/history/history.component';
 import {ContactUsComponent} from './features/contact-us/contact-us.component';
 import {FuturComponent} from './features/futur/futur.component';
+import {FriendsComponent} from './features/friends/friends.component';
+import {GroupsComponent} from './features/groups/groups.component';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'auth/login'},
@@ -28,6 +30,16 @@ export const routes: Routes = [
         data: { showSidebar: true }
       },
       {
+        path: 'friends',
+        component: FriendsComponent,
+        data: { showSidebar: false }
+      },
+      {
+        path: 'groups',
+        component: GroupsComponent,
+        data: { showSidebar: false }
+      },
+      {
         path: 'VoyageAVenir',
         component: FuturComponent,
         data: { showSidebar: false }
@@ -35,7 +47,7 @@ export const routes: Routes = [
       {
         path: 'history',
         component: HistoryComponent,
-        data: {showSidebar: true},
+        data: {showSidebar: false},
       },
       {
         path: 'home',

@@ -1,0 +1,118 @@
+<div class="friends-card" *ngIf="data$ | async as data">
+
+  <div class="friends-header">
+    <h3>Amis</h3>
+    <p class="friends-subtitle">Gérez vos demandes et vos amis</p>
+  </div>
+
+  <div class="sections">
+
+    <!-- ================= DEMANDES ================= -->
+    <div class="section">
+      <h4 class="section-title">Demandes en attente</h4>
+
+      <div class="list" *ngIf="data.friendRequests.length; else noRequests">
+
+        <div class="item"
+             *ngFor="let r of data.friendRequests.slice((reqPage - 1) * pageSize, reqPage * pageSize)">
+
+          <div class="item-left">
+            <img class="avatar"
+                 [src]="r.avatarUrl || defaultAvatar"
+                 alt="avatar">
+            <div class="name">
+              <div class="fullname">
+                {{ r.firstName }} {{ r.lastName }}
+              </div>
+              <div class="small">Demande d’ami</div>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="btn btn-success"
+                    (click)="acceptRequest(r.id)">
+              Accepter
+            </button>
+
+            <button class="btn btn-ghost"
+                    (click)="declineRequest(r.id)">
+              Refuser
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <ng-template #noRequests>
+        <div class="empty">
+          Aucune demande en attente
+        </div>
+      </ng-template>
+
+      <!-- Pagination -->
+      <div class="pagination"
+           *ngIf="data.friendRequests.length > pageSize">
+
+        <button class="btn btn-ghost"
+                (click)="prevReqPage()"
+                [disabled]="reqPage === 1">
+          Précédent
+        </button>
+
+        <span class="page-info">
+          {{ reqPage }} / {{ data.reqTotalPages }}
+        </span>
+
+        <button class="btn btn-ghost"
+                (click)="nextReqPage(data.friendRequests.length)"
+                [disabled]="reqPage === data.reqTotalPages">
+          Suivant
+        </button>
+
+      </div>
+    </div>
+
+    <!-- ================= AMIS ================= -->
+    <div class="section">
+      <h4 class="section-title">Mes amis</h4>
+
+      <div class="list" *ngIf="data.friends.length; else noFriends">
+
+        <div class="item" *ngFor="let f of data.friends">
+
+          <div class="item-left">
+            <img class="avatar"
+                 [src]="f.avatarUrl || defaultAvatar"
+                 alt="avatar">
+            <div class="name">
+              <div class="fullname">
+                {{ f.firstName }} {{ f.lastName }}
+              </div>
+              <div class="small">Ami</div>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="btn btn-primary"
+                    (click)="goToFriendProfile(f.id)">
+              Voir profil
+            </button>
+
+            <button class="btn btn-danger"
+                    (click)="removeFriend(f.id)">
+              Supprimer
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <ng-template #noFriends>
+        <div class="empty">
+          Vous n’avez aucun ami pour le moment
+        </div>
+      </ng-template>
+    </div>
+
+  </div>
+</div>

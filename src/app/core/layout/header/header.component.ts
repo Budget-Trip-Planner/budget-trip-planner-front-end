@@ -18,6 +18,7 @@ export class HeaderComponent implements OnInit {
 
   userImageUrl: string | null = null;
   defaultAvatar: string = '/profile-icon.png';
+  isOpen = false;
 
   constructor(public userService: UserService) { }
 
@@ -29,4 +30,12 @@ export class HeaderComponent implements OnInit {
     });
   }
 
+  toggleMenu(event?: MouseEvent) {
+    event?.stopPropagation();
+    this.isOpen = !this.isOpen;
+  }
+
+  closeMenu() {
+    this.isOpen = false;
+  }
 }

@@ -8,23 +8,71 @@
     <li>
       <a [routerLink]="['/accueil']" routerLinkActive="active">Accueil</a>
     </li>
-    <li>
-      <a [routerLink]="['/VoyageAVenir']" routerLinkActive="active">Voyages à venir</a>
+    <li class="dropdown">
+      <div class="dropdown-trigger">
+        Voyages
+        <span class="caret"></span>
+      </div>
+
+      <ul class="dropdown-menu">
+        <li>
+          <a [routerLink]="['/VoyageAVenir']" routerLinkActive="active">
+            Voyages à venir
+          </a>
+        </li>
+        <li>
+          <a [routerLink]="['/history']" routerLinkActive="active">
+            Voyages Passé
+          </a>
+        </li>
+      </ul>
     </li>
-    <li>
-      <a [routerLink]="['/communaute']" routerLinkActive="active">Communauté</a>
+    <li class="dropdown">
+      <div class="dropdown-trigger">
+        Communauté
+        <span class="caret"></span>
+      </div>
+
+      <ul class="dropdown-menu">
+        <li>
+          <a [routerLink]="['/friends']" routerLinkActive="active">
+            Amis
+          </a>
+        </li>
+        <li>
+          <a [routerLink]="['/groups']" routerLinkActive="active">
+            Groupes
+          </a>
+        </li>
+      </ul>
     </li>
     <li>
       <a [routerLink]="['/messages']" routerLinkActive="active">Messages</a>
     </li>
   </ul>
 
-  <div class="profile-container">
-    <img
-      [src]="userImageUrl ? userImageUrl : userService.defaultAvatar"
-      alt="Mon Profil"
-      class="profile-icon"
-      [routerLink]="['/userProfile']"
-    >
-  </div>
+  <li class="dropdown">
+    <div class="dropdown-trigger">
+      <img
+        [src]="userImageUrl ? userImageUrl : userService.defaultAvatar"
+        alt="Mon Profil"
+        class="profile-icon"
+        [routerLink]="['/userProfile']"
+      >
+      <span class="caret"></span>
+    </div>
+
+    <ul class="dropdown-menu">
+      <li>
+        <a [routerLink]="['/userProfile']" routerLinkActive="active">
+          Mon profil
+        </a>
+      </li>
+      <li>
+        <a [routerLink]="['/contactUs']" routerLinkActive="active">
+          Contactez-nous
+        </a>
+      </li>
+    </ul>
+  </li>
 </nav>

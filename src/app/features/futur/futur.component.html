@@ -1,23 +1,33 @@
 <div class="history-container">
   <div class="user-header">
     <h3>Mes Voyages</h3>
-    <p class="subtitle">Retrouvez ici tous vos futur souvenirs</p>
+    <p class="subtitle">Retrouvez ici tous vos futurs souvenirs</p>
   </div>
 
   <div class="content-scroll">
-    <h2 class="page-title">A venir </h2>
+    <h2 class="page-title">À venir</h2>
 
     <div class="trips-grid">
-      @for (trip of futurTrips; track trip.id) {
-        @if (isFuturTrip(trip.startDate)){
-          <app-trip-card [trip]="trip" (tripClick)="openTripDetails($event)"></app-trip-card>
+
+      @if (futurTrips$ | async; as futurTrips) {
+
+        @for (trip of futurTrips; track trip.id) {
+          <app-trip-card
+            [trip]="trip"
+            (tripClick)="openTripDetails($event)">
+          </app-trip-card>
+        } @empty {
+          <div class="empty-state">
+            <p>Vous n'avez pas/plus de voyages à venir.</p>
+          </div>
         }
-      } @empty {
+
+      } @else {
         <div class="empty-state">
-          <p>Vous n'avez pas/plus de voyages à venir.</p>
+          <p>Chargement...</p>
         </div>
       }
+
     </div>
   </div>
 </div>
-

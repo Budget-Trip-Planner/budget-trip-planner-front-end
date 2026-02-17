@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, inject, numberAttribute, OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
@@ -6,6 +6,8 @@ import { MatButtonModule } from '@angular/material/button';
 
 import { User, UserService } from '../../core/services/user/user.service';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
+import {HttpClient} from '@angular/common/http';
+import {AuthService} from '../../core/auth/auth-service';
 
 @Component({
   selector: 'app-user-profile',
@@ -21,9 +23,10 @@ import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/c
   styleUrl: './user-profile.component.css'
 })
 export class UserProfileComponent implements OnInit {
-
+  private http = inject(HttpClient);
+  private authService = inject(AuthService);
   user: User | null = null;
-  private readonly userId = 1;
+  private readonly userId = numberAttribute(this.authService.userId);
 
   constructor(
     public userService: UserService,

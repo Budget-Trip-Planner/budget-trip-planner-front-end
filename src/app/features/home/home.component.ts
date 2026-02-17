@@ -101,6 +101,11 @@ export class HomeComponent {
       return;
     }
 
+    if (this.startDate == null || this.startDate === '') {
+      this.errorMessage = 'Choisir une date de départ';
+      return;
+    }
+
     if (this.duration <= 0) {
       this.errorMessage = 'La durée du voyage doit être d’au moins 1 jour';
       return;
@@ -121,7 +126,7 @@ export class HomeComponent {
       budget: Number(this.budget),
       duration: Number(this.duration),
       departureCity: this.departureCity.trim(),
-      startDate: this.startDate || '2025-08-01',
+      startDate: this.startDate,
       preferences: (this.selectedPreferences.length
           ? this.selectedPreferences
           : ['Plage', 'Culture', 'Gastronomie']

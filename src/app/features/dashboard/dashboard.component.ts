@@ -107,7 +107,7 @@ export class DashboardComponent implements OnInit {
       this.tripService.saveSelectedTrip(this.proposalSource).subscribe({
         next: () => {
           this.isSaving = false;
-          this.router.navigate(['/history']);
+          this.router.navigate(['/VoyageAVenir']);
         },
         error: err => {
           console.error('Erreur lors de lenregistrement du voyage :', err);
