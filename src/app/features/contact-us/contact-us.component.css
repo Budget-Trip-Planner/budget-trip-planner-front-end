@@ -122,6 +122,15 @@
   max-width: 300px;
   box-shadow: 0 4px 12px rgba(27, 59, 187, 0.2);
 }
+.submit-button.valid {
+  background-color: #10b981; /* vert moderne */
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.submit-button.valid:hover:not(:disabled) {
+  background-color: #059669;
+  box-shadow: 0 6px 15px rgba(16, 185, 129, 0.4);
+}
 
 .submit-button:hover:not(:disabled) {
   background-color: #1835a2;
