@@ -189,3 +189,7 @@
 .dropdown-menu a:hover {
   background: #f3f4f6;
 }
+
+.logout-button {
+  cursor: pointer;
+}

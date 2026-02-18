@@ -14,6 +14,7 @@ import {ContactUsComponent} from './features/contact-us/contact-us.component';
 import {FuturComponent} from './features/futur/futur.component';
 import {FriendsComponent} from './features/friends/friends.component';
 import {GroupsComponent} from './features/groups/groups.component';
+import {MessageComponent} from './features/messages/messages.component';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'auth/login'},
@@ -28,6 +29,11 @@ export const routes: Routes = [
         path: 'userProfile',
         component: UserProfileComponent,
         data: { showSidebar: true }
+      },
+      {
+        path: 'messages',
+        component: MessageComponent,
+        data: { showSidebar: false }
       },
       {
         path: 'friends',

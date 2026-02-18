@@ -43,11 +43,12 @@
       <label for="firstName">Prénom</label>
       <input id="firstName" type="text" name="firstName" [(ngModel)]="user.firstName" placeholder="Sophie">
     </div>
-
-
     <div class="form-group">
       <label for="username">Nom d'utilisateur</label>
-      <input id="username" type="text" name="username" [(ngModel)]="user.username" placeholder="Dubois5" disabled>
+
+      <div class="fake-input" id="username" aria-readonly="true">
+        {{ user?.username || 'Dubois5' }}
+      </div>
     </div>
 
     <div class="form-row">

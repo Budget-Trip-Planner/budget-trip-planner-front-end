@@ -1,0 +1,199 @@
+<div class="chat-layout">
+
+  <!-- ===== LEFT : conversations ===== -->
+  <div class="left">
+    <div class="left-header">
+
+      <!-- header + bouton -->
+      <div class="header-row">
+        <div>
+          <div class="title">Messages</div>
+          <div class="subtitle">Conversations</div>
+        </div>
+
+        <button class="new-btn" type="button" (click)="openCreate()">
+          + Nouveau
+        </button>
+      </div>
+
+    </div>
+
+    <!-- panel création -->
+    <div class="create-panel" *ngIf="isCreateOpen">
+
+      <div class="create-title">Nouvelle conversation</div>
+
+      <div class="create-choices">
+        <button class="chip" type="button"
+                (click)="chooseMode('friend')"
+                [class.active]="createMode === 'friend'">
+          Ami
+        </button>
+
+        <button class="chip" type="button"
+                (click)="chooseMode('group')"
+                [class.active]="createMode === 'group'">
+          Groupe
+        </button>
+      </div>
+
+      <!-- ===== MODE AMI ===== -->
+      <div *ngIf="createMode === 'friend'">
+        <div class="create-sub">Choisir un ami</div>
+
+        <ng-container *ngIf="friends$ | async as friends; else loadingFriends">
+          <div class="pick-list" *ngIf="friends.length; else noFriends">
+            <button
+              type="button"
+              class="pick-item"
+              *ngFor="let f of friends"
+              (click)="selectedFriendId = f.id"
+              [class.selected]="selectedFriendId === f.id"
+            >
+              <img class="pick-avatar" [src]="f.imageUrl || '/profile-icon.png'" alt="avatar" />
+              <span class="pick-name">{{ f.firstName }} {{ f.lastName }}</span>
+            </button>
+          </div>
+
+          <ng-template #noFriends>
+            <div class="empty-small">Aucun ami disponible</div>
+          </ng-template>
+
+          <div class="create-actions">
+            <button class="btn-ghost" type="button" (click)="closeCreate()">Annuler</button>
+            <button class="btn-primary" type="button"
+                    [disabled]="!selectedFriendId"
+                    (click)="createConversationWithFriend(friends)">
+              Créer
+            </button>
+          </div>
+        </ng-container>
+
+        <ng-template #loadingFriends>
+          <div class="empty-small">Chargement...</div>
+        </ng-template>
+      </div>
+
+      <!-- ===== MODE GROUPE ===== -->
+      <div *ngIf="createMode === 'group'">
+        <div class="create-sub">Choisir un groupe</div>
+
+        <ng-container *ngIf="groups$ | async as groups">
+          <div class="pick-list" *ngIf="groups.length; else noGroups">
+            <button
+              type="button"
+              class="pick-item"
+              *ngFor="let g of groups"
+              (click)="selectedGroupId = g.id"
+              [class.selected]="selectedGroupId === g.id"
+            >
+              <span class="pick-name">{{ g.name }}</span>
+            </button>
+          </div>
+
+          <ng-template #noGroups>
+            <div class="empty-small">
+              Aucun groupe pour le moment (composant groupe non fait).
+            </div>
+          </ng-template>
+
+          <div class="create-actions">
+            <button class="btn-ghost" type="button" (click)="closeCreate()">Annuler</button>
+            <button class="btn-primary" type="button"
+                    [disabled]="!selectedGroupId"
+                    (click)="createConversationWithGroup(groups)">
+              Créer
+            </button>
+
+          </div>
+        </ng-container>
+      </div>
+
+    </div> <!-- ✅ FIN create-panel -->
+
+    <!-- liste des conversations -->
+    <div class="conv-list" *ngIf="conversations$ | async as convs">
+      <button
+        class="conv-item"
+        *ngFor="let c of convs"
+        (click)="selectConversation(c.id)"
+        type="button"
+      >
+        <div class="avatar">
+          <img *ngIf="!c.isGroup" [src]="(c.imageUrl || '/profile-icon.png')" alt="avatar" />
+          <div *ngIf="c.isGroup" class="group-avatar">👥</div>
+        </div>
+
+        <div class="conv-main">
+          <div class="conv-top">
+            <div class="conv-title">{{ c.title }}</div>
+            <div class="conv-time">{{ formatTime(c.lastAt) }}</div>
+          </div>
+
+          <div class="conv-bottom">
+            <div class="conv-last">{{ c.lastText }}</div>
+
+            <div class="unread-dot" *ngIf="c.unreadCount > 0">
+              {{ c.unreadCount }}
+            </div>
+          </div>
+        </div>
+      </button>
+    </div>
+
+  </div> <!-- ✅ FIN LEFT -->
+
+  <!-- ===== RIGHT : messages ===== -->
+  <main class="right">
+
+    <ng-container *ngIf="selectedConversation$ | async as conv; else noSelection">
+
+      <div class="right-header">
+        <div class="right-title">{{ conv.title }}</div>
+
+        <div class="right-subtitle">
+          {{ conv.isGroup ? 'Groupe' : 'Conversation' }}
+
+          <span class="participants" *ngIf="conv.isGroup">
+            • {{ participantsLabel(conv) }}
+          </span>
+        </div>
+      </div>
+
+      <div class="messages" *ngIf="messages$ | async as msgs">
+        <div class="msg-row" *ngFor="let m of msgs" [class.mine]="isMine(m.senderId)">
+          <div class="bubble">
+
+            <div class="sender" *ngIf="conv.isGroup && !isMine(m.senderId)">
+              {{ messagesService.senderNameFromConversation(conv, m.senderId) }}
+            </div>
+
+            <div class="text">{{ m.text }}</div>
+            <div class="meta">
+              <span class="time">{{ formatTime(m.createdAt) }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="right-footer">
+        <div class="input-row">
+          <input
+            type="text"
+            placeholder="Écrire un message..."
+            [(ngModel)]="newMessageText"
+            (keyup.enter)="sendMessage()"
+          />
+          <button class="send-btn" (click)="sendMessage()">Envoyer</button>
+        </div>
+      </div>
+
+    </ng-container>
+
+    <ng-template #noSelection>
+      <div class="empty-right"></div>
+    </ng-template>
+
+  </main>
+
+</div>

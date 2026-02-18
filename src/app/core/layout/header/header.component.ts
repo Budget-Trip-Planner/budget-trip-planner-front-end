@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import {Router, RouterLink, RouterLinkActive} from '@angular/router';
 import { UserService } from '../../services/user/user.service';
+import { AuthService } from '../../auth/auth-service';
 
 @Component({
   selector: 'app-header',
@@ -19,6 +20,8 @@ export class HeaderComponent implements OnInit {
   userImageUrl: string | null = null;
   defaultAvatar: string = '/profile-icon.png';
   isOpen = false;
+  private auth = inject(AuthService);
+  private router = inject(Router);
 
   constructor(public userService: UserService) { }
 
@@ -37,5 +40,10 @@ export class HeaderComponent implements OnInit {
 
   closeMenu() {
     this.isOpen = false;
+  }
+
+  logout(): void {
+    this.auth.logout();
+    this.router.navigate(['/auth/login']);
   }
 }

@@ -207,3 +207,23 @@ input:disabled {
     width: 100%;
   }
 }
+.fake-input {
+  width: 100%;
+  padding: 14px 18px;
+  border: 1px solid var(--color-action);
+  border-radius: 10px;
+  background: #f5f5f5;
+  font-size: 15px;
+  font-weight: 500;
+  color: #888;
+  box-sizing: border-box;
+
+  /* Pour que ça “feel” comme un input */
+  min-height: 48px; /* proche du rendu de l'input */
+  display: flex;
+  align-items: center;
+
+  /* même transition que input */
+  transition: border-color 0.2s ease;
+  cursor: default;
+}

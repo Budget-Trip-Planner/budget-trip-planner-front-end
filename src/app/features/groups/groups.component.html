@@ -1,1 +1,145 @@
-<h1>groups in progress!</h1>
+<div class="friends-card" *ngIf="data$ | async as data">
+
+  <div class="friends-header">
+    <h3>Groupes</h3>
+    <p class="friends-subtitle">Gérez vos invitations et vos groupes</p>
+  </div>
+
+  <div class="sections">
+
+    <!-- ================= INVITATIONS ================= -->
+    <div class="section">
+      <h4 class="section-title">Invitations en attente</h4>
+
+      <div class="list" *ngIf="data.pendingInvites.length; else noInvites">
+
+        <div class="item"
+             *ngFor="let inv of data.pendingInvites.slice((invitePage - 1) * pageSize, invitePage * pageSize)">
+
+          <div class="item-left">
+            <img class="avatar"
+                 [src]="inv.avatarUrl || defaultAvatar"
+                 alt="avatar">
+
+            <div class="name">
+              <div class="fullname">{{ inv.groupName }}</div>
+              <div class="small">Invité par {{ inv.inviterLabel }} • {{ inv.membersCount }} membres</div>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="btn btn-success" (click)="acceptInvite(inv.id)">Accepter</button>
+            <button class="btn btn-ghost" (click)="declineInvite(inv.id)">Refuser</button>
+          </div>
+
+        </div>
+
+      </div>
+
+      <ng-template #noInvites>
+        <div class="empty">Aucune invitation en attente</div>
+      </ng-template>
+
+      <div class="pagination" *ngIf="data.pendingInvites.length > pageSize">
+        <button class="btn btn-ghost" (click)="prevInvitePage()" [disabled]="invitePage === 1">Précédent</button>
+        <span class="page-info">{{ invitePage }} / {{ data.inviteTotalPages }}</span>
+        <button class="btn btn-ghost"
+                (click)="nextInvitePage(data.pendingInvites.length)"
+                [disabled]="invitePage === data.inviteTotalPages">
+          Suivant
+        </button>
+      </div>
+    </div>
+
+    <!-- ================= MES GROUPES ================= -->
+    <div class="section">
+      <h4 class="section-title">Mes groupes</h4>
+
+      <div class="list" *ngIf="data.myGroups.length; else noGroups">
+
+        <div class="item" *ngFor="let g of data.myGroups">
+
+          <div class="item-left">
+            <img class="avatar"
+                 [src]="g.avatarUrl || defaultAvatar"
+                 alt="avatar">
+            <div class="name">
+              <div class="fullname">{{ g.name }}</div>
+              <div class="small">{{ g.membersCount }} membres</div>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="btn btn-primary" (click)="openAddFriend(g.id)">Ajouter un ami</button>
+            <button class="btn btn-ghost" (click)="viewMembers(g.id)">Voir les membres</button>
+            <button class="btn btn-danger" (click)="leaveGroup(g.id)">Quitter</button>
+          </div>
+        </div>
+
+        <!-- ===== panel "ajouter un ami" ===== -->
+        <div class="add-panel" *ngIf="addPanelOpenForGroupId !== null">
+          <div class="add-title">Ajouter un ami au groupe</div>
+
+          <ng-container *ngIf="friends$ | async as friends">
+            <div class="add-list" *ngIf="friends.length; else noFriends">
+              <button class="add-item"
+                      type="button"
+                      *ngFor="let f of friends"
+                      (click)="selectedFriendId = f.id"
+                      [class.selected]="selectedFriendId === f.id">
+                <img class="add-avatar" [src]="f.imageUrl || defaultAvatar" alt="avatar">
+                <span class="add-name">{{ f.firstName }} {{ f.lastName }}</span>
+              </button>
+            </div>
+
+            <ng-template #noFriends>
+              <div class="empty">Aucun ami disponible</div>
+            </ng-template>
+
+            <div class="add-actions">
+              <button class="btn btn-ghost" (click)="closeAddFriend()">Annuler</button>
+              <button class="btn btn-primary"
+                      [disabled]="!selectedFriendId"
+                      (click)="addFriendToGroup(addPanelOpenForGroupId!, friends)">
+                Ajouter
+              </button>
+            </div>
+          </ng-container>
+        </div>
+
+      </div>
+
+      <ng-template #noGroups>
+        <div class="empty">Vous n’êtes dans aucun groupe pour le moment</div>
+      </ng-template>
+    </div>
+
+    <!-- ================= MEMBRES ================= -->
+    <div class="section">
+      <h4 class="section-title">Membres du groupe sélectionné</h4>
+
+      <ng-container *ngIf="members$ | async as members">
+
+        <div class="list" *ngIf="members.length; else noMembers">
+          <div class="item" *ngFor="let m of members">
+            <div class="item-left">
+              <img class="avatar" [src]="m.imageUrl || defaultAvatar" alt="avatar">
+              <div class="name">
+                <div class="fullname">{{ m.firstName }} {{ m.lastName }}</div>
+                <div class="small">Membre</div>
+              </div>
+            </div>
+            <div class="actions"></div>
+          </div>
+        </div>
+
+        <ng-template #noMembers>
+          <div class="empty">
+            Sélectionne un groupe puis “Voir les membres”.
+          </div>
+        </ng-template>
+
+      </ng-container>
+    </div>
+  </div>
+</div>
