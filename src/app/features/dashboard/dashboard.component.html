@@ -1,38 +1,108 @@
 <div *ngIf="trip as t" class="dashboard">
   <header class="header" [ngStyle]="{ background: headerBackground }">
-    <a [routerLink]="backRoute" class="back-btn"><- Retour</a>
-
+    <a class="back-btn" (click)="goBack()">← Retour</a>
     <h1>{{ t.destination }} - {{ t.duree }} jours - {{ t.budget }}€</h1>
     <p>{{ t.description }}</p>
   </header>
 
   <main class="content">
-    <section class="budget-card">
-      <h2>Repartition du budget</h2>
-      <div class="chart" [ngStyle]="{ background: chartGradient }">
-        {{ t.budget }} €
-      </div>
+    <section class="left-column">
 
-      <div class="legend">
-        <div *ngFor="let item of t.repartition" class="legend-item">
-          <span class="color" [ngStyle]="{ background: item.couleur }"></span>
-          {{ item.label }} - {{ item.montant }} €
+      <button
+        type="button"
+        class="info-card budget-card budget-toggle-card"
+        (click)="toggleBudgetDetails()"
+      >
+        <div class="budget-card-header">
+          <span>Budget</span>
+          <span class="toggle-icon">{{ showBudgetDetails ? '−' : '+' }}</span>
         </div>
-      </div>
+        <div class="legend">
+          <div *ngFor="let item of t.repartition" class="legend-item">
+            <span class="color" [ngStyle]="{ background: item.couleur }"></span>
+            {{ item.label }} - {{ item.montant }} €
+          </div>
+        </div>
+        <div *ngIf="showBudgetDetails" class="collapsible-content">
+          <div class="chart compact-chart" [ngStyle]="{ background: chartGradient }">
+            {{ t.budget }} €
+          </div>
+        </div>
+      </button>
 
-      <div>
+      <article class="info-card hotel-card compact-hotel-card">
         <h2>Hotel</h2>
-        <div class="legend-item">
+        <div class="hotel-content">
           {{ t.hotel }}
         </div>
-      </div>
+      </article>
+
+      <article *ngIf="t.flights.length" class="info-card flights-card">
+        <button class="card-toggle" type="button" (click)="toggleFlights()">
+          <span>Vols</span>
+          <span class="toggle-icon">{{ showFlights ? '−' : '+' }}</span>
+        </button>
+
+        <div *ngIf="showFlights" class="collapsible-content">
+          <div *ngFor="let flight of t.flights" class="flight-item">
+            <strong>{{ flight.label }}</strong>
+
+            <p>
+              {{ flight.departureCode }} → {{ flight.arrivalCode }}
+            </p>
+
+            <p>
+              {{ formatDateTime(flight.departureDateTime) }}
+              →
+              {{ formatDateTime(flight.arrivalDateTime) }}
+            </p>
+
+            <p>
+              {{ flight.airline }} {{ flight.flightNumber }}
+              · {{ flight.duration }}
+              · {{ getStopsLabel(flight.stops) }}
+            </p>
+          </div>
+        </div>
+      </article>
     </section>
 
-    <section class="days">
-      <div *ngFor="let jour of t.jours" class="day-card">
-        <h3>{{ jour.titre }}</h3>
-        <p>{{ jour.activites.join(' • ') }}</p>
+    <section class="right-column">
+      <div class="right-panel-switch" *ngIf="t.tips.length">
+        <button
+          type="button"
+          class="switch-btn"
+          [class.active]="rightPanelView === 'jours'"
+          (click)="showDays()"
+        >
+          Journées
+        </button>
+
+        <button
+          type="button"
+          class="switch-btn"
+          [class.active]="rightPanelView === 'conseils'"
+          (click)="showTips()"
+        >
+          Conseils
+        </button>
       </div>
+
+      <section class="days">
+        <ng-container *ngIf="rightPanelView === 'jours'; else tipsView">
+          <div *ngFor="let jour of t.jours" class="day-card">
+            <h3>{{ jour.titre }}</h3>
+            <p>{{ jour.activites.join(' • ') }}</p>
+          </div>
+        </ng-container>
+
+        <ng-template #tipsView>
+          <div *ngFor="let tip of t.tips; let i = index" class="day-card">
+            <h3>Conseil {{ i + 1 }}</h3>
+            <p>{{ tip }}</p>
+          </div>
+        </ng-template>
+      </section>
     </section>
   </main>
 
@@ -40,7 +110,11 @@
     <button class="save" (click)="saveTrip()" [disabled]="!canSave || isSaving">
       {{ isSaving ? 'Enregistrement...' : 'Enregistrer' }}
     </button>
+
     <button class="share">Partager</button>
-    <p *ngIf="saveError" class="save-error">{{ saveError }}</p>
+
+    <p *ngIf="saveError" class="save-error">
+      {{ saveError }}
+    </p>
   </div>
 </div>

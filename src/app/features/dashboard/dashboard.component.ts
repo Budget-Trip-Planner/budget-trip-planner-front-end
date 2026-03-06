@@ -1,7 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { ProposalPayload, TripService } from '../../core/services/trip/trip.service';
+import {
+  ProposalFlightLeg,
+  ProposalFlights,
+  ProposalPayload,
+  TripService
+} from '../../core/services/trip/trip.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 
@@ -16,6 +21,19 @@ interface Jour {
   activites: string[];
 }
 
+interface FlightDisplay {
+  label: string;
+  airline: string;
+  flightNumber: string;
+  departureCode: string;
+  arrivalCode: string;
+  departureDateTime: string;
+  arrivalDateTime: string;
+  duration: string;
+  travelClass: string;
+  stops: number;
+}
+
 interface Trip {
   destination: string;
   duree: number;
@@ -25,7 +43,11 @@ interface Trip {
   imageUrl: string;
   repartition: BudgetItem[];
   jours: Jour[];
+  flights: FlightDisplay[];
+  tips: string[];
 }
+
+type RightPanelView = 'jours' | 'conseils';
 
 @Component({
   selector: 'app-dashboard',
@@ -43,6 +65,10 @@ export class DashboardComponent implements OnInit {
   isSaving = false;
   saveError = '';
   backRoute = '/proposals';
+
+  showFlights = false;
+  showBudgetDetails = false;
+  rightPanelView: RightPanelView = 'jours';
 
   private proposalSource: any | null = null;
 
@@ -67,7 +93,7 @@ export class DashboardComponent implements OnInit {
 
     const voyageId = Number(this.route.snapshot.paramMap.get('id'));
     if (!Number.isNaN(voyageId) && voyageId > 0) {
-      this.tripService.getTripDetails(voyageId).subscribe({
+      this.tripService.getTripDetailsWithFlights(voyageId).subscribe({
         next: proposal => {
           this.proposalSource = proposal;
           this.canSave = false;
@@ -83,7 +109,6 @@ export class DashboardComponent implements OnInit {
 
     console.warn('No trip data received');
   }
-
 
   saveTrip(): void {
     if (!this.canSave || !this.proposalSource || this.isSaving) {
@@ -103,7 +128,7 @@ export class DashboardComponent implements OnInit {
 
       this.isSaving = true;
       this.saveError = '';
-      console.log(this.proposalSource);
+
       this.tripService.saveSelectedTrip(this.proposalSource).subscribe({
         next: () => {
           this.isSaving = false;
@@ -118,6 +143,25 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  goBack(): void {
+    this.router.navigate([this.backRoute]);
+  }
+
+  toggleFlights(): void {
+    this.showFlights = !this.showFlights;
+  }
+
+  toggleBudgetDetails(): void {
+    this.showBudgetDetails = !this.showBudgetDetails;
+  }
+
+  showDays(): void {
+    this.rightPanelView = 'jours';
+  }
+
+  showTips(): void {
+    this.rightPanelView = 'conseils';
+  }
 
   updateChartGradient(): void {
     if (!this.trip) {
@@ -125,6 +169,7 @@ export class DashboardComponent implements OnInit {
     }
 
     const total = this.trip.repartition.reduce((acc, item) => acc + item.montant, 0);
+
     if (!total) {
       this.chartGradient = '#ddd';
       return;
@@ -153,12 +198,11 @@ export class DashboardComponent implements OnInit {
       `url("${this.trip.imageUrl}") center / cover no-repeat`;
   }
 
-  goBack(): void {
-    this.router.navigate(['/proposals']);
-  }
-
   private applyProposal(proposal: ProposalPayload | any): void {
     this.trip = this.mapProposalToTrip(proposal);
+    this.showFlights = false;
+    this.showBudgetDetails = false;
+    this.rightPanelView = 'jours';
     this.updateChartGradient();
     this.updateHeaderBackground();
   }
@@ -167,14 +211,17 @@ export class DashboardComponent implements OnInit {
     const destination = this.getDestinationLabel(proposal?.destination);
     const duration = Number(proposal?.durationDays ?? proposal?.duration ?? proposal?.duree ?? 0);
     const budget = Number(proposal?.budgetTotal ?? proposal?.budget ?? 0);
-    const hotel = proposal?.hotel ?? "ibis budget";
+    const hotel = proposal?.hotel ?? 'ibis budget';
     const expense = proposal?.expense ?? {};
     const itineraries = Array.isArray(proposal?.itineraries) ? proposal.itineraries : [];
+    const tips = Array.isArray(proposal?.tips)
+      ? proposal.tips.map((tip: any) => String(tip ?? '').trim()).filter(Boolean)
+      : [];
 
     return {
       destination,
       duree: duration,
-      hotel : hotel,
+      hotel,
       budget,
       description: `Sejour de ${duration} jours a ${destination}`,
       imageUrl:
@@ -204,6 +251,8 @@ export class DashboardComponent implements OnInit {
         },
       ],
       jours: this.mapItinerariesToDays(itineraries),
+      flights: this.mapFlightsToDisplay(proposal?.flights),
+      tips
     };
   }
 
@@ -212,6 +261,7 @@ export class DashboardComponent implements OnInit {
 
     for (const itinerary of itineraries) {
       const dayNumber = Number(itinerary?.dayNumber ?? itinerary?.day ?? 0);
+
       if (!dayNumber) {
         continue;
       }
@@ -234,6 +284,59 @@ export class DashboardComponent implements OnInit {
       }));
   }
 
+  private mapFlightsToDisplay(flights: ProposalFlights | null | undefined): FlightDisplay[] {
+    if (!flights) {
+      return [];
+    }
+
+    const items: FlightDisplay[] = [];
+
+    if (flights.outbound) {
+      items.push(this.mapFlightLeg('Aller', flights.outbound));
+    }
+
+    if (flights.return) {
+      items.push(this.mapFlightLeg('Retour', flights.return));
+    }
+
+    return items;
+  }
+
+  private mapFlightLeg(label: string, leg: ProposalFlightLeg): FlightDisplay {
+    return {
+      label,
+      airline: leg.airline,
+      flightNumber: leg.flightNumber,
+      departureCode: leg.departureAirport?.code ?? '',
+      arrivalCode: leg.arrivalAirport?.code ?? '',
+      departureDateTime: leg.departureDateTime,
+      arrivalDateTime: leg.arrivalDateTime,
+      duration: leg.duration,
+      travelClass: leg.class,
+      stops: Number(leg.stops ?? 0)
+    };
+  }
+
+  formatDateTime(value: string | null | undefined): string {
+    if (!value) {
+      return '';
+    }
+
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) {
+      return value;
+    }
+
+    return new Intl.DateTimeFormat('fr-FR', {
+      dateStyle: 'medium',
+      timeStyle: 'short'
+    }).format(date);
+  }
+
+  getStopsLabel(stops: number): string {
+    return stops === 0 ? 'Direct' : `${stops} escale${stops > 1 ? 's' : ''}`;
+  }
+
   private getDestinationLabel(destination: any): string {
     if (!destination) {
       return '';
@@ -243,6 +346,9 @@ export class DashboardComponent implements OnInit {
       return destination;
     }
 
-    return destination.city ?? '';
+    const city = destination.city ?? '';
+    const country = destination.country ?? '';
+
+    return [city, country].filter(Boolean).join(', ');
   }
 }
