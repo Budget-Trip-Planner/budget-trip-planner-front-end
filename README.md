@@ -1,11 +1,7 @@
 # Budget Trip Planner — Front-end
 
 Interface web du projet **Budget Trip Planner**, une application de planification de
-voyage selon budget, préférences et contraintes. Construite avec **Angular**.
-Projet de groupe — ESIEE Paris (E5, 2025/2026).
-
-> Vue d'ensemble du projet : https://github.com/Budget-Trip-Planner
-> Portfolio : https://afouanee.dev/projects/budget-trip-planner
+voyage selon budget, préférences et contraintes. Construite avec **Angular**. Projet académique — ESIEE Paris (E5, 2025/2026).
 
 ---
 
@@ -56,9 +52,3 @@ docker run -p 80:80 btp-front
 
 Renseigner l'URL de l'API back-end dans les fichiers d'environnement Angular
 (`src/environments/`) selon l'environnement (dev / prod).
-
----
-
-## Équipe
-
-Projet de groupe — ESIEE Paris (E5, 2025/2026).
